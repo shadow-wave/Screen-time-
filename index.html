@@ -138,13 +138,6 @@
             /* Specific Print Elements */
             .print-day-badge { display: inline-block; background-color: #e0f2fe !important; color: #1e3a8a !important; font-weight: 800; font-size: 7.5pt; padding: 2px 6px; border-radius: 4px; margin-bottom: 4px; border: 1px solid #bae6fd !important; }
             .print-img { max-width: 50px; max-height: 50px; object-fit: cover; border: 1px solid #cbd5e1; border-radius: 4px; display: block; margin: 0 auto;}
-            
-            /* Authorized Signatures Bottom Anchored */
-            .print-sig-area { margin-top: auto; display: flex; justify-content: space-between; padding-top: 20px; page-break-inside: avoid; }
-            .print-sig-block { width: 45mm; text-align: center; }
-            .print-sig-line { border-top: 1px solid #000; margin-bottom: 5px; }
-            .print-sig-title { font-size: 8pt; font-weight: 800; color: #000; text-transform: uppercase; }
-            .print-sig-sub { font-size: 7pt; font-weight: 600; color: #64748b; }
         }
     </style>
 </head>
@@ -1075,25 +1068,7 @@
                         </tbody>
                     </table>
                     
-                    <div class="print-sig-area">
-                        <div class="print-sig-block">
-                            <div class="print-sig-line"></div>
-                            <div class="print-sig-title">Volunteer Secretary</div>
-                            <div class="print-sig-sub">Group 5 Representative</div>
-                        </div>
-                        <div class="print-sig-block">
-                            <div class="print-sig-line"></div>
-                            <div class="print-sig-title">Program Officer</div>
-                            <div class="print-sig-sub">NSS Unit 30 & 63</div>
-                        </div>
-                        <div class="print-sig-block">
-                            <div class="print-sig-line"></div>
-                            <div class="print-sig-title">Principal</div>
-                            <div class="print-sig-sub">MG College Iritty</div>
-                        </div>
-                    </div>
-
-                    <div style="text-align: center; margin-top: 15px; font-size: 7.5pt; font-weight: 600; color: #64748b; border-top: 1px solid #e2e8f0; padding-top: 10px;">
+                    <div style="text-align: center; margin-top: auto; font-size: 7.5pt; font-weight: 600; color: #64748b; border-top: 1px solid #e2e8f0; padding-top: 10px;">
                         Official Master Report • Page ${pageIndex} of ${totalGroups} • Printed: ${todayStr}
                     </div>
                 </div>
@@ -1316,4 +1291,4 @@
         };
     </script>
 </body>
-                              </html>
+</html>
