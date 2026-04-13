@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,9 +11,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     
-    <!-- Anti-FOUC Pre-Loader -->
+    <!-- Anti-FOUC (Flash of Unstyled Content) Pure CSS Pre-Loader -->
     <style>
-        #app-content { display: none; } 
+        #app-content { display: none; }
         #nss-loader {
             position: fixed; inset: 0; background-color: #f8fafc; z-index: 9999;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -27,8 +26,10 @@
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 
-    <!-- Tailwind CSS Engine -->
+    <!-- Tailwind CSS Design Engine -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Tailwind Configuration -->
     <script>
         tailwind.config = {
             theme: {
@@ -73,21 +74,45 @@
         input:focus, select:focus, textarea:focus, button:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.3); border-color: #2563eb !important; }
         .modal-bg { background-color: rgba(15, 23, 42, 0.75); backdrop-filter: blur(5px); }
 
-        /* --- PDF EXPORT STYLES --- */
+        /* --- ADVANCED PDF EXPORT STYLES FOR IMAGES --- */
         @media print {
-            @page { margin: 15mm; size: A4 portrait; }
+            @page { margin: 12mm; size: A4 portrait; }
             body { background: white !important; color: black !important; font-size: 10pt !important; }
             .print-hidden { display: none !important; }
             .print-show { display: block !important; }
-            table { width: 100% !important; border-collapse: collapse !important; page-break-inside: auto; }
+            
+            table { width: 100% !important; border-collapse: collapse !important; page-break-inside: auto; table-layout: fixed; }
             tr { page-break-inside: avoid !important; page-break-after: auto; }
             thead { display: table-header-group; }
-            th { background-color: #f8fafc !important; color: black !important; border-bottom: 2px solid #000 !important; padding: 10px !important; text-transform: uppercase; font-size: 8.5pt; font-weight: 800; -webkit-print-color-adjust: exact; }
-            td { border-bottom: 1px solid #cbd5e1 !important; padding: 10px !important; color: #1e293b !important; font-size: 9pt; }
+            th { background-color: #f8fafc !important; color: black !important; border-bottom: 2px solid #000 !important; padding: 8px !important; text-transform: uppercase; font-size: 8pt; font-weight: 800; -webkit-print-color-adjust: exact; }
+            td { border-bottom: 1px solid #cbd5e1 !important; padding: 8px !important; color: #1e293b !important; font-size: 8.5pt; vertical-align: top; overflow: hidden; word-wrap: break-word; }
+            
+            /* Column Width Controls for Print */
+            th:nth-child(1) { width: 12%; } /* Date */
+            th:nth-child(2) { width: 18%; } /* Participant */
+            th:nth-child(3) { width: 15%; } /* Baseline */
+            th:nth-child(4) { width: 40%; } /* Intervention */
+            th:nth-child(5) { width: 15%; } /* Image */
+
+            /* Image Print Formatting */
+            .evidence-img { 
+                max-width: 60px !important; 
+                max-height: 60px !important; 
+                width: 60px !important;
+                height: 60px !important;
+                object-fit: cover !important; 
+                border: 1px solid #94a3b8 !important;
+                border-radius: 4px !important;
+                display: block;
+                margin: 0 auto;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
             .shadow-official, .shadow-modal, .shadow-sm, .shadow-md { box-shadow: none !important; }
             .rounded-xl, .rounded-lg, .rounded-md { border-radius: 0 !important; }
             .border-gov-border { border-color: #94a3b8 !important; }
-            img { -webkit-print-color-adjust: exact; print-color-adjust: exact; max-height: 80px !important; }
+            header img { max-height: 70px !important; }
         }
     </style>
 </head>
@@ -97,14 +122,14 @@
     <div id="nss-loader">
         <div class="loader-circle"></div>
         <h2 style="color: #0f172a; font-weight: 800; font-size: 1.2rem;">Establishing Secure Connection</h2>
-        <p style="color: #64748b; font-size: 0.875rem; font-weight: 600; margin-top: 8px;">NSS Official Portal â€¢ Loading Interface...</p>
+        <p style="color: #64748b; font-size: 0.875rem; font-weight: 600; margin-top: 8px;">NSS Official Portal • Loading Interface...</p>
     </div>
 
     <!-- Main Application Content -->
     <div id="app-content" class="pb-20 print:pb-0">
         
         <!-- FLOATING SERVER INDICATOR -->
-        <div class="fixed bottom-4 right-4 bg-white border border-slate-200 px-3 py-2 rounded-full shadow-floating flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-amber-500 z-50 print:hidden transition-all" id="server-status-badge">
+        <div class="fixed bottom-4 right-4 bg-white border border-slate-200 px-3 py-2 rounded-full shadow-lg flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-amber-500 z-50 print:hidden transition-all" id="server-status-badge">
             <span class="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse" id="server-dot"></span>
             <span id="server-text">Connecting...</span>
         </div>
@@ -117,7 +142,7 @@
                     <img src="college-image.png" alt="College Logo" class="h-14 sm:h-16 w-auto object-contain" onerror="this.src='https://ui-avatars.com/api/?name=MG+C&background=0f172a&color=fff&rounded=true&bold=true&size=128'" id="college-logo">
                     <div class="text-center md:text-left border-l-2 border-slate-200 pl-4 print:border-black">
                         <h1 class="text-lg sm:text-2xl font-black text-gov-navy tracking-tight uppercase print:text-black leading-tight">Mahatma Gandhi College Iritty</h1>
-                        <h2 class="text-xs sm:text-sm font-bold text-gov-blue tracking-widest uppercase mt-0.5 print:text-black">NSS Unit 30 & 63 â€¢ Group 5</h2>
+                        <h2 class="text-xs sm:text-sm font-bold text-gov-blue tracking-widest uppercase mt-0.5 print:text-black">NSS Unit 30 & 63 • Group 5</h2>
                     </div>
                 </div>
                 <div class="flex items-center gap-6">
@@ -151,19 +176,9 @@
             <!-- VIEW 1: DATA ENTRY FORM -->
             <section id="view-submit" class="view-section max-w-3xl mx-auto fade-in print-hidden">
                 <div class="bg-white rounded-2xl shadow-official border border-gov-border overflow-hidden">
-                    
-                    <div class="bg-gov-light border-b border-gov-border px-6 sm:px-10 py-8">
-                        <div class="flex flex-col sm:flex-row gap-6 items-center sm:items-start text-center sm:text-left">
-                            <div class="flex-grow">
-                                <h2 class="text-2xl font-black text-gov-navy uppercase tracking-tight">Community Outreach Record</h2>
-                                <p class="text-sm text-slate-500 font-medium mt-1.5">Action Plan: Screen-Free Early Childhood Development</p>
-                            </div>
-                            <!-- OFFICIAL CIRCULAR IMAGE INTEGRATION -->
-                            <div class="flex-shrink-0 w-full sm:w-32 flex flex-col items-center">
-                                <span class="text-[9px] font-bold uppercase tracking-widest text-slate-400 mb-1">Official Mandate</span>
-                                <img src="1000143641.jpg" alt="Official MWCD Circular" class="w-24 sm:w-full rounded border border-slate-300 shadow-sm cursor-pointer hover:opacity-90 transition-opacity" onclick="window.open(this.src, '_blank')" onerror="this.style.display='none'">
-                            </div>
-                        </div>
+                    <div class="bg-gov-light border-b border-gov-border px-6 sm:px-10 py-8 text-center sm:text-left">
+                        <h2 class="text-2xl font-black text-gov-navy uppercase tracking-tight">Community Outreach Record</h2>
+                        <p class="text-sm text-slate-500 font-medium mt-1.5">Action Plan: Screen-Free Early Childhood Development</p>
                     </div>
 
                     <div id="success-message" class="hidden bg-emerald-50 border-b border-emerald-100 p-6 flex items-center justify-center sm:justify-start gap-4 transition-all">
@@ -177,23 +192,12 @@
                     </div>
 
                     <form id="submission-form" class="p-6 sm:p-10 space-y-8">
-                        
-                        <!-- 1. NSS Volunteer Identity -->
-                        <fieldset class="bg-blue-50/50 p-5 rounded-xl border border-blue-100">
-                            <div class="text-xs font-bold text-gov-blue uppercase tracking-widest mb-4 flex items-center gap-2"><i class="ph-fill ph-badge text-base"></i> 1. Data Collector (NSS Volunteer)</div>
-                            <div>
-                                <label for="volunteerName" class="block text-sm font-bold text-gov-navy mb-2">Volunteer Name <span class="text-gov-danger">*</span></label>
-                                <input type="text" id="volunteerName" required placeholder="Enter your full name" class="w-full px-4 py-3 rounded-lg border border-slate-300 bg-white text-sm font-medium text-gov-navy placeholder-slate-400 transition-all"/>
-                            </div>
-                        </fieldset>
-
-                        <!-- 2. Participant Identity -->
                         <fieldset>
-                            <legend class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2 w-full border-b border-slate-100 pb-2"><i class="ph-fill ph-identification-card text-base"></i> 2. Participant Details</legend>
+                            <legend class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2 w-full border-b border-slate-100 pb-2"><i class="ph-fill ph-identification-card text-base"></i> 1. Participant Details</legend>
                             <div class="space-y-6">
                                 <div>
                                     <label for="parentName" class="block text-sm font-bold text-gov-navy mb-2">Participant / Guardian Name <span class="text-gov-danger">*</span></label>
-                                    <input type="text" id="parentName" required placeholder="Enter parent/guardian full name" class="w-full px-4 py-3 rounded-lg border border-slate-300 bg-white text-sm font-medium text-gov-navy placeholder-slate-400 transition-all"/>
+                                    <input type="text" id="parentName" required placeholder="Enter full name" class="w-full px-4 py-3 rounded-lg border border-slate-300 bg-white text-sm font-medium text-gov-navy placeholder-slate-400 transition-all"/>
                                 </div>
                                 
                                 <div>
@@ -267,10 +271,9 @@
                             </div>
                         </fieldset>
 
-                        <!-- 3. Baseline Metrics -->
                         <fieldset class="bg-slate-50 p-5 sm:p-6 rounded-xl border border-slate-200 shadow-inner">
                             <legend class="sr-only">Pre-Intervention Screen Habits</legend>
-                            <div class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2"><i class="ph-fill ph-chart-bar text-base"></i> 3. Pre-Intervention Habits</div>
+                            <div class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2"><i class="ph-fill ph-chart-bar text-base"></i> 2. Pre-Intervention Habits</div>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
                                     <label for="screenTime" class="block text-sm font-bold text-gov-navy mb-1.5">Avg. Daily Screen Time <span class="text-gov-danger">*</span></label>
@@ -303,9 +306,8 @@
                             </div>
                         </fieldset>
 
-                        <!-- 4. Intervention Activity -->
                         <fieldset>
-                            <legend class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2 w-full border-b border-slate-100 pb-2"><i class="ph-fill ph-activity text-base"></i> 4. NSS Intervention Executed</legend>
+                            <legend class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2 w-full border-b border-slate-100 pb-2"><i class="ph-fill ph-activity text-base"></i> 3. NSS Intervention Executed</legend>
                             <div class="space-y-6">
                                 <div>
                                     <label for="description" class="block text-sm font-bold text-gov-navy mb-1.5">Activity Documentation <span class="text-gov-danger">*</span></label>
@@ -323,15 +325,19 @@
                                             <label for="photoInput" class="block text-sm font-bold text-gov-navy">Photographic Evidence</label>
                                             <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider bg-slate-100 px-2 py-0.5 rounded">Optional</span>
                                         </div>
+                                        <!-- Image Input -->
                                         <div class="relative overflow-hidden border border-slate-300 rounded-lg px-4 py-2.5 bg-white flex items-center justify-center sm:justify-start cursor-pointer hover:bg-slate-50 transition-colors group focus-within:ring-2 focus-within:ring-gov-accent">
-                                            <input type="file" id="photoInput" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20" onchange="handlePhotoSelect()"/>
+                                            <input type="file" id="photoInput" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20" onchange="handlePhotoSelect(event)"/>
                                             <div id="photo-placeholder" class="flex items-center gap-2 text-slate-500 text-sm font-semibold transition-transform group-hover:scale-105">
-                                                <i class="ph-bold ph-upload-simple text-lg group-hover:text-gov-accent"></i> Click to Attach Document
+                                                <i class="ph-bold ph-upload-simple text-lg group-hover:text-gov-accent"></i> Click to Attach Image
                                             </div>
                                             <div id="photo-success" class="hidden items-center gap-2 text-gov-success text-sm font-bold">
-                                                <i class="ph-bold ph-check-circle text-lg"></i> File Attached Securely
+                                                <i class="ph-bold ph-check-circle text-lg"></i> Image Ready for Report
                                             </div>
                                         </div>
+                                        <p class="text-[10px] text-slate-500 mt-1.5 font-semibold flex items-center justify-center sm:justify-start gap-1">
+                                            <i class="ph-fill ph-file-pdf text-gov-accent"></i> Image will be printed directly on the official PDF.
+                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -379,7 +385,7 @@
                     <form id="admin-login-form" class="p-8">
                         <div class="mb-6">
                             <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2 text-center">Authorization PIN</label>
-                            <input type="password" id="adminPin" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢" autocomplete="off" class="w-full px-4 py-4 rounded-md border border-slate-300 focus:border-gov-accent text-center tracking-[0.5em] font-mono text-xl bg-slate-50 transition-colors font-bold"/>
+                            <input type="password" id="adminPin" placeholder="•••••••" autocomplete="off" class="w-full px-4 py-4 rounded-md border border-slate-300 focus:border-gov-accent text-center tracking-[0.5em] font-mono text-xl bg-slate-50 transition-colors font-bold"/>
                             <p id="login-error" class="text-red-600 text-xs font-bold text-center mt-2 hidden">Invalid Credentials.</p>
                         </div>
                         <button type="submit" class="w-full bg-gov-accent hover:bg-blue-700 text-white font-bold py-3.5 px-4 rounded-md transition-all shadow-md uppercase tracking-widest text-sm flex items-center justify-center gap-2">
@@ -389,8 +395,8 @@
                 </div>
             </section>
 
-            <!-- VIEW 4: ADMIN DASHBOARD -->
-            <section id="view-admin_dashboard" class="view-section hidden bg-white sm:rounded-xl shadow-official border border-gov-border p-5 sm:p-8 print:border-none print:shadow-none print:p-0 fade-in">
+            <!-- VIEW 4: ADMIN DASHBOARD & PDF GENERATOR -->
+            <section id="view-admin_dashboard" class="view-section hidden bg-white sm:rounded-xl shadow-official border border-gov-border p-4 sm:p-8 print:border-none print:shadow-none print:p-0 fade-in">
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4 border-b border-slate-100 pb-6 print-hidden">
                     <div>
                         <h2 class="text-2xl font-black text-gov-navy uppercase tracking-tight flex items-center gap-2"><i class="ph-fill ph-database text-gov-accent"></i> Central Registry</h2>
@@ -418,8 +424,8 @@
 
                 <!-- PDF Header -->
                 <div class="hidden print-show mb-6 border-b-2 border-black pb-4 text-center mt-2">
-                    <h2 class="text-2xl font-black uppercase tracking-widest leading-tight">Poshan Pakhwada Compliance Report</h2>
-                    <h3 class="text-sm font-bold uppercase mt-1">Initiative: Maximizing Early Brain Development</h3>
+                    <h2 class="text-xl font-black uppercase tracking-widest leading-tight">Poshan Pakhwada Compliance Report</h2>
+                    <h3 class="text-sm font-bold uppercase mt-1 text-slate-700">Initiative: Maximizing Early Brain Development</h3>
                     <div class="flex justify-between items-end text-xs font-bold mt-6">
                         <div class="text-left leading-relaxed">
                             <p>Institution: Mahatma Gandhi College Iritty</p>
@@ -427,22 +433,22 @@
                         </div>
                         <div class="text-right leading-relaxed">
                             <p>Generated: <span id="print-date" class="font-medium"></span></p>
-                            <p>Verified Records: <span id="print-count" class="font-medium text-lg">0</span></p>
+                            <p>Verified Records: <span id="print-count" class="font-medium text-base">0</span></p>
                         </div>
                     </div>
                 </div>
 
-                <!-- Admin Table -->
+                <!-- Data Table with Image Rendering -->
                 <div class="overflow-x-auto rounded-lg border border-gov-border print:border-none print:overflow-visible shadow-sm print:shadow-none bg-white">
                     <table class="w-full text-left border-collapse">
                         <thead>
                             <tr class="bg-gov-light print:bg-transparent text-slate-600 text-[10px] uppercase tracking-widest border-b-2 border-slate-200 print:border-black">
-                                <th class="py-3 px-4 font-bold border-r border-slate-200 print:border-none whitespace-nowrap">Date / ID</th>
-                                <th class="py-3 px-4 font-bold border-r border-slate-200 print:border-none whitespace-nowrap">Target Details</th>
-                                <th class="py-3 px-4 font-bold border-r border-slate-200 print:border-none whitespace-nowrap">Prior Screen Use</th>
-                                <th class="py-3 px-4 font-bold border-r border-slate-200 print:border-none w-2/5">Intervention Activity</th>
-                                <th class="py-3 px-4 font-bold text-center border-r border-slate-200 print:border-none whitespace-nowrap">Media</th>
-                                <th class="py-3 px-4 font-bold text-center print-hidden">Mgmt</th>
+                                <th class="py-3 px-3 font-bold border-r border-slate-200 print:border-none">Date</th>
+                                <th class="py-3 px-3 font-bold border-r border-slate-200 print:border-none">Participant Identity</th>
+                                <th class="py-3 px-3 font-bold border-r border-slate-200 print:border-none">Baseline Habits</th>
+                                <th class="py-3 px-3 font-bold border-r border-slate-200 print:border-none">Intervention Details</th>
+                                <th class="py-3 px-3 font-bold text-center border-r border-slate-200 print:border-none">Evidence</th>
+                                <th class="py-3 px-3 font-bold text-center print-hidden">Mgmt</th>
                             </tr>
                         </thead>
                         <tbody id="admin-table-body" class="text-sm">
@@ -451,11 +457,22 @@
                     </table>
                 </div>
                 
-                <!-- Notice the Signatures are removed from here as requested -->
+                <!-- PDF Signature Block -->
                 <div class="hidden print-show mt-10 pt-4 text-black">
-                    <p class="text-[10px] text-justify font-medium leading-relaxed border-t border-slate-300 pt-4">
-                        <strong>Official Declaration:</strong> This document constitutes the compliance report for the community outreach mandate under Poshan Pakhwada. The activities detailed herein were verified and executed by volunteers of NSS Group 5.
-                    </p>
+                    <div class="flex justify-between text-center font-bold text-xs mt-16">
+                        <div class="w-40">
+                            <div class="border-b border-black mb-2 h-10"></div>
+                            Volunteer Secretary<br><span class="font-medium text-[10px]">Group 5</span>
+                        </div>
+                        <div class="w-40">
+                            <div class="border-b border-black mb-2 h-10"></div>
+                            Program Officer<br><span class="font-medium text-[10px]">NSS Unit 30 & 63</span>
+                        </div>
+                        <div class="w-40">
+                            <div class="border-b border-black mb-2 h-10"></div>
+                            Principal<br><span class="font-medium text-[10px]">MG College Iritty</span>
+                        </div>
+                    </div>
                 </div>
             </section>
 
@@ -466,7 +483,6 @@
         </footer>
     </div>
 
-    <!-- MODALS -->
     <!-- Edit Modal -->
     <div id="edit-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 print-hidden">
         <div class="absolute inset-0 modal-bg transition-opacity" onclick="closeEditModal()"></div>
@@ -480,10 +496,6 @@
                 <form id="edit-form" class="space-y-6">
                     <input type="hidden" id="edit-id" />
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                        <div>
-                            <label for="edit-volunteerName" class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Volunteer Name</label>
-                            <input type="text" id="edit-volunteerName" required class="w-full px-4 py-3 rounded-md border border-slate-300 text-sm font-bold text-gov-navy bg-slate-50 focus:bg-white transition-colors"/>
-                        </div>
                         <div>
                             <label for="edit-parentName" class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Participant Name</label>
                             <input type="text" id="edit-parentName" required class="w-full px-4 py-3 rounded-md border border-slate-300 text-sm font-bold text-gov-navy bg-slate-50 focus:bg-white transition-colors"/>
@@ -521,52 +533,54 @@
                                 <option value="None">None</option>
                             </select>
                         </div>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-5 border-t border-slate-100 pt-6">
+                        <div class="sm:col-span-2">
+                            <label for="edit-description" class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Activity Description</label>
+                            <textarea id="edit-description" required rows="2" class="w-full px-4 py-3 rounded-md border border-slate-300 text-sm font-medium text-gov-navy resize-none bg-slate-50 focus:bg-white transition-colors"></textarea>
+                        </div>
                         <div>
                             <label for="edit-activityDuration" class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Duration</label>
-                            <input type="text" id="edit-activityDuration" required class="w-full px-4 py-3 rounded-md border border-slate-300 text-sm font-bold text-gov-navy bg-slate-50 focus:bg-white transition-colors"/>
+                            <input type="text" id="edit-activityDuration" required class="w-full h-[62px] px-4 rounded-md border border-slate-300 text-sm font-bold text-gov-navy bg-slate-50 focus:bg-white transition-colors"/>
                         </div>
                     </div>
-                    <div>
-                        <label for="edit-description" class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Activity Description</label>
-                        <textarea id="edit-description" required rows="2" class="w-full px-4 py-3 rounded-md border border-slate-300 text-sm font-medium text-gov-navy resize-none bg-slate-50 focus:bg-white transition-colors"></textarea>
-                    </div>
-                    <div class="flex items-center gap-3 p-3 bg-slate-50 border border-slate-200 rounded-md">
-                        <input type="checkbox" id="edit-photo" class="w-5 h-5 accent-gov-accent cursor-pointer">
-                        <label for="edit-photo" class="text-sm font-bold text-gov-navy cursor-pointer">Image Verification Document Attached</label>
+                    <div class="flex items-center justify-between p-4 bg-blue-50 border border-blue-100 rounded-lg mt-4">
+                        <span class="text-sm font-bold text-gov-navy flex items-center gap-2"><i class="ph-fill ph-image"></i> Image Verification Status</span>
+                        <span id="edit-photo-status" class="text-xs font-bold bg-white px-2 py-1 rounded border border-slate-200"></span>
                     </div>
                 </form>
             </div>
             
             <div class="p-4 bg-slate-50 border-t border-slate-200 flex gap-3 flex-shrink-0">
-                <button type="button" onclick="closeEditModal()" class="flex-1 px-4 py-2.5 bg-white border border-slate-300 hover:bg-slate-100 text-slate-700 rounded-md text-sm font-bold transition-all uppercase tracking-widest">Cancel</button>
-                <button type="submit" form="edit-form" class="flex-1 px-4 py-2.5 bg-gov-accent hover:bg-blue-700 text-white rounded-md text-sm font-bold transition-all uppercase tracking-widest shadow-sm">Save Changes</button>
+                <button type="button" onclick="closeEditModal()" class="flex-1 px-4 py-2.5 bg-white border border-slate-300 hover:bg-slate-100 text-slate-700 rounded-md text-xs font-bold transition-all uppercase tracking-widest">Cancel</button>
+                <button type="submit" form="edit-form" class="flex-1 px-4 py-2.5 bg-gov-accent hover:bg-blue-700 text-white rounded-md text-xs font-bold transition-all uppercase tracking-widest shadow-sm">Save Changes</button>
             </div>
         </div>
     </div>
 
-    <!-- Delete Confirmation Modal -->
+    <!-- Delete Modal -->
     <div id="delete-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 print-hidden">
         <div class="absolute inset-0 modal-bg transition-opacity" onclick="closeDeleteModal()"></div>
-        <div class="bg-white rounded-2xl shadow-modal w-full max-w-sm relative z-10 fade-in p-8 text-center border-t-[5px] border-red-600">
-            <div class="w-20 h-20 bg-red-50 text-red-600 border border-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <i class="ph-bold ph-warning text-3xl"></i>
+        <div class="bg-white rounded-2xl shadow-modal w-full max-w-sm relative z-10 fade-in p-8 text-center border-t-[5px] border-gov-danger">
+            <div class="w-20 h-20 bg-red-50 text-gov-danger border border-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="ph-bold ph-warning text-4xl"></i>
             </div>
             <h3 class="font-black text-lg text-gov-navy mb-2 uppercase tracking-wide">Purge Record?</h3>
             <p class="text-sm text-slate-500 mb-8 font-medium">This action is irreversible and removes data from the official PDF report.</p>
             <div class="flex flex-col gap-3">
-                <button type="button" id="confirm-delete-btn" class="w-full px-4 py-3 bg-red-600 hover:bg-red-700 text-white rounded-md font-bold text-sm uppercase tracking-widest transition-all shadow-sm">Confirm Deletion</button>
-                <button type="button" onclick="closeDeleteModal()" class="w-full px-4 py-3 bg-white border border-slate-300 hover:bg-slate-100 text-slate-600 rounded-md font-bold text-sm uppercase tracking-widest transition-all">Cancel</button>
+                <button type="button" id="confirm-delete-btn" class="w-full px-4 py-3 bg-gov-danger hover:bg-red-700 text-white rounded-md font-bold text-xs uppercase tracking-widest transition-all shadow-sm">Confirm Deletion</button>
+                <button type="button" onclick="closeDeleteModal()" class="w-full px-4 py-3 bg-white border border-slate-300 hover:bg-slate-50 text-slate-600 rounded-md font-bold text-xs uppercase tracking-widest transition-all">Cancel</button>
             </div>
         </div>
     </div>
 
-    <!-- FIREBASE SDK & LOGIC -->
+    <!-- FIREBASE SDK & CORE LOGIC -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, collection, addDoc, onSnapshot, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // User Firebase Server Configuration
+        // User Firebase Server
         const userFirebaseConfig = {
             apiKey: "AIzaSyDOazMKFYPS0RMi1xbxQSWXCpg93kKkznI",
             authDomain: "nsss-b34aa.firebaseapp.com",
@@ -587,7 +601,7 @@
 
         let currentUser = null;
         let globalSubmissions = [];
-        let hasPhoto = false;
+        let currentPhotoBase64 = null; // Stores compressed image
         let deletingId = null;
         let isAdminActive = false;
 
@@ -617,16 +631,38 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         };
 
-        window.handlePhotoSelect = function() {
-            const input = document.getElementById('photoInput');
-            if (input.files && input.files[0]) {
-                hasPhoto = true;
-                document.getElementById('photo-placeholder').classList.add('hidden');
-                document.getElementById('photo-success').classList.remove('hidden');
-                document.getElementById('photo-success').classList.add('flex');
+        // --- IMAGE COMPRESSION ENGINE ---
+        window.handlePhotoSelect = function(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    const MAX_WIDTH = 400; // Compress heavily for Firestore & PDF
+                    const scaleSize = MAX_WIDTH / img.width;
+                    canvas.width = MAX_WIDTH;
+                    canvas.height = img.height * scaleSize;
+
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+                    // Convert to base64 JPEG string (very small payload)
+                    currentPhotoBase64 = canvas.toDataURL('image/jpeg', 0.6);
+
+                    // Update UI
+                    document.getElementById('photo-placeholder').classList.add('hidden');
+                    document.getElementById('photo-success').classList.remove('hidden');
+                    document.getElementById('photo-success').classList.add('flex');
+                }
+                img.src = e.target.result;
             }
+            reader.readAsDataURL(file);
         };
 
+        // --- Auth & Admin logic ---
         document.getElementById('admin-login-form').addEventListener('submit', (e) => {
             e.preventDefault(); 
             const pinInput = document.getElementById('adminPin').value;
@@ -651,6 +687,22 @@
             switchView('submit'); 
         }
 
+        function updateServerStatus(isConnected) {
+            const statusBadge = document.getElementById('server-status-badge');
+            const statusDot = document.getElementById('server-dot');
+            const statusText = document.getElementById('server-text');
+
+            if (isConnected) {
+                statusDot.className = "w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse";
+                statusText.className = "text-emerald-700";
+                statusText.innerText = "Database Online";
+            } else {
+                statusDot.className = "w-2.5 h-2.5 rounded-full bg-red-500";
+                statusText.className = "text-red-700";
+                statusText.innerText = "Disconnected";
+            }
+        }
+
         const initAuth = async () => {
             try {
                 if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
@@ -663,23 +715,6 @@
                 updateServerStatus(false);
             }
         };
-
-        function updateServerStatus(isConnected) {
-            const statusBadge = document.getElementById('server-status-badge');
-            if(!statusBadge) return;
-            const statusDot = document.getElementById('server-dot');
-            const statusText = document.getElementById('server-text');
-
-            if (isConnected) {
-                statusDot.className = "w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse";
-                statusText.className = "text-emerald-700";
-                statusText.innerText = "Server Online: nsss-b34aa";
-            } else {
-                statusDot.className = "w-2.5 h-2.5 rounded-full bg-red-500";
-                statusText.className = "text-red-700";
-                statusText.innerText = "Disconnected";
-            }
-        }
 
         onAuthStateChanged(auth, (user) => {
             currentUser = user;
@@ -730,6 +765,7 @@
             if(isAdminActive) renderTable(); 
         };
 
+        // --- UI Renders ---
         const renderFeed = (data) => {
             const emptyState = document.getElementById('feed-empty');
             const listContainer = document.getElementById('feed-list');
@@ -741,10 +777,15 @@
                 emptyState.classList.add('hidden');
                 data.forEach(post => {
                     const dateStr = new Date(post.timestamp).toLocaleDateString('en-IN', { month: 'short', day: 'numeric' });
-                    let photoBadge = post.photoIncludedForNss 
-                        ? `<span class="inline-flex items-center gap-1.5 text-[10px] text-emerald-700 font-bold bg-emerald-50 py-1.5 px-2.5 rounded-md border border-emerald-200 uppercase tracking-widest"><i class="ph-bold ph-check-circle text-sm"></i> Validated</span>` : '';
                     
-                    const vName = post.volunteerName || "N/A";
+                    let photoBadge = '';
+                    if (post.photoData) {
+                        photoBadge = `<span class="inline-flex items-center gap-1.5 text-[10px] text-emerald-700 font-bold bg-emerald-50 py-1.5 px-2.5 rounded-md border border-emerald-200 uppercase tracking-widest"><i class="ph-bold ph-image text-sm"></i> Image Stored</span>`;
+                    } else if (post.photoIncludedForNss) {
+                        // Legacy support
+                        photoBadge = `<span class="inline-flex items-center gap-1.5 text-[10px] text-emerald-700 font-bold bg-emerald-50 py-1.5 px-2.5 rounded-md border border-emerald-200 uppercase tracking-widest"><i class="ph-bold ph-check-circle text-sm"></i> Validated</span>`;
+                    }
+
                     const sTime = post.screenTime || "N/A";
                     const sDev = post.primaryDevice || "N/A";
                     const aDur = post.activityDuration || "N/A";
@@ -757,7 +798,7 @@
                                 <h3 class="text-lg font-black text-gov-navy tracking-tight">${post.parentName}</h3>
                                 <div class="flex items-center gap-2 mt-1">
                                     <span class="text-[10px] text-gov-accent font-bold uppercase tracking-widest bg-blue-50 px-2 py-0.5 rounded border border-blue-100">${post.childAge}</span>
-                                    <span class="text-xs font-semibold text-slate-400">â€¢ ${dateStr}</span>
+                                    <span class="text-xs font-semibold text-slate-400">• ${dateStr}</span>
                                 </div>
                             </div>
                             ${photoBadge}
@@ -767,10 +808,6 @@
                             <div><span class="text-slate-400 block text-[9px] uppercase tracking-widest font-bold mb-0.5">Play Duration</span><span class="text-gov-navy font-bold">${aDur}</span></div>
                         </div>
                         <p class="text-slate-700 text-sm leading-relaxed font-medium">"${post.description}"</p>
-                        <div class="mt-4 pt-3 border-t border-slate-100 flex items-center gap-2">
-                            <i class="ph-fill ph-badge text-gov-blue"></i>
-                            <span class="text-[10px] uppercase tracking-widest font-bold text-slate-400">Logged by: <span class="text-gov-navy">${vName}</span></span>
-                        </div>
                     </div>`);
                 });
             }
@@ -781,7 +818,6 @@
             const filteredData = globalSubmissions.filter(post => 
                 post.parentName.toLowerCase().includes(query) || 
                 post.description.toLowerCase().includes(query) ||
-                (post.volunteerName && post.volunteerName.toLowerCase().includes(query)) ||
                 (post.primaryDevice && post.primaryDevice.toLowerCase().includes(query))
             );
 
@@ -796,36 +832,38 @@
 
             filteredData.forEach(post => {
                 const dateStr = new Date(post.timestamp).toLocaleDateString('en-IN');
-                const photoStatus = post.photoIncludedForNss 
-                    ? '<span class="inline-flex items-center justify-center w-6 h-6 rounded bg-emerald-100 text-emerald-700"><i class="ph-bold ph-check"></i></span>' 
-                    : '<span class="text-slate-300 font-bold">-</span>';
+                
+                // --- IMAGE RENDERING FOR PDF ---
+                let evidenceCell = '<span class="text-slate-300 font-bold uppercase text-[9px]">-</span>';
+                if (post.photoData) {
+                    // Render actual image for PDF
+                    evidenceCell = `<img src="${post.photoData}" alt="Evidence" class="evidence-img shadow-sm">`;
+                } else if (post.photoIncludedForNss) {
+                    evidenceCell = '<span class="inline-flex items-center justify-center w-6 h-6 rounded bg-emerald-100 text-emerald-700"><i class="ph-bold ph-check"></i></span>';
+                }
 
-                const vName = post.volunteerName || "N/A";
                 const sTime = post.screenTime || "N/A";
                 const sDev = post.primaryDevice || "N/A";
                 const aDur = post.activityDuration || "N/A";
 
                 tbody.insertAdjacentHTML('beforeend', `
                 <tr class="border-b border-slate-200 hover:bg-slate-50 transition-colors print:break-inside-avoid">
-                    <td class="py-3 px-4 text-slate-600 font-medium text-xs border-r border-slate-200 print:border-none whitespace-nowrap">${dateStr}</td>
-                    <td class="py-3 px-4 border-r border-slate-200 print:border-none whitespace-nowrap">
-                        <div class="text-[9px] text-slate-400 font-bold uppercase tracking-widest mb-0.5">Participant</div>
-                        <div class="font-bold text-gov-navy">${post.parentName}</div>
-                        <div class="text-[9px] text-gov-accent font-bold uppercase tracking-widest mt-0.5">${post.childAge}</div>
-                        <div class="text-[9px] text-slate-400 font-bold uppercase tracking-widest mt-2 mb-0.5">Collector</div>
-                        <div class="text-xs font-bold text-gov-navy">${vName}</div>
+                    <td class="py-3 px-3 text-slate-600 font-medium text-xs border-r border-slate-200 print:border-none whitespace-nowrap">${dateStr}</td>
+                    <td class="py-3 px-3 border-r border-slate-200 print:border-none">
+                        <div class="font-bold text-gov-navy leading-tight">${post.parentName}</div>
+                        <div class="text-[9px] text-gov-accent font-bold uppercase tracking-widest mt-1">${post.childAge}</div>
                     </td>
-                    <td class="py-3 px-4 border-r border-slate-200 print:border-none whitespace-nowrap align-top pt-4">
+                    <td class="py-3 px-3 border-r border-slate-200 print:border-none">
                         <div class="font-semibold text-slate-700 text-xs">${sDev}</div>
                         <div class="text-[9px] text-slate-500 font-bold tracking-widest mt-0.5">${sTime}</div>
                     </td>
-                    <td class="py-3 px-4 border-r border-slate-200 print:border-none align-top pt-4">
+                    <td class="py-3 px-3 border-r border-slate-200 print:border-none">
                         <div class="font-medium text-slate-700 text-sm leading-snug">${post.description}</div>
                         <div class="text-[9px] text-slate-500 font-bold uppercase tracking-widest mt-1.5">Duration: <span class="text-gov-navy">${aDur}</span></div>
                     </td>
-                    <td class="py-3 px-4 text-center align-middle border-r border-slate-200 print:border-none">${photoStatus}</td>
-                    <td class="py-3 px-4 text-center align-middle print-hidden whitespace-nowrap">
-                        <button onclick="openEditModal('${post.id}')" class="text-gov-accent hover:bg-blue-50 p-1.5 rounded transition-colors" aria-label="Edit Record"><i class="ph-bold ph-pencil-simple text-base"></i></button>
+                    <td class="py-3 px-3 text-center align-middle border-r border-slate-200 print:border-none">${evidenceCell}</td>
+                    <td class="py-3 px-3 text-center align-middle print-hidden whitespace-nowrap">
+                        <button onclick="openEditModal('${post.id}')" class="text-gov-accent hover:bg-blue-50 p-1.5 rounded transition-colors mb-1" aria-label="Edit Record"><i class="ph-bold ph-pencil-simple text-base"></i></button>
                         <button onclick="openDeleteModal('${post.id}')" class="text-gov-danger hover:bg-red-50 p-1.5 rounded transition-colors" aria-label="Delete Record"><i class="ph-bold ph-trash text-base"></i></button>
                     </td>
                 </tr>`);
@@ -836,14 +874,22 @@
             const post = globalSubmissions.find(p => p.id === id);
             if(!post) return;
             document.getElementById('edit-id').value = post.id;
-            document.getElementById('edit-volunteerName').value = post.volunteerName || "";
             document.getElementById('edit-parentName').value = post.parentName;
             document.getElementById('edit-childAge').value = post.childAge;
             document.getElementById('edit-screenTime').value = post.screenTime || "";
             document.getElementById('edit-primaryDevice').value = post.primaryDevice || "";
             document.getElementById('edit-activityDuration').value = post.activityDuration || "";
             document.getElementById('edit-description').value = post.description;
-            document.getElementById('edit-photo').checked = post.photoIncludedForNss;
+            
+            const statusSpan = document.getElementById('edit-photo-status');
+            if (post.photoData) {
+                statusSpan.innerHTML = '<span class="text-emerald-600"><i class="ph-bold ph-check"></i> Image Stored</span>';
+            } else if (post.photoIncludedForNss) {
+                statusSpan.innerHTML = '<span class="text-amber-600"><i class="ph-bold ph-check"></i> Legacy Check</span>';
+            } else {
+                statusSpan.innerHTML = '<span class="text-slate-400">No Image</span>';
+            }
+
             document.getElementById('edit-modal').classList.remove('hidden');
             document.body.style.overflow = 'hidden'; 
         };
@@ -857,15 +903,14 @@
             e.preventDefault();
             if (!currentUser) return;
             try {
+                // Note: Not updating photo data here to prevent accidental deletion during text edits
                 await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'nss_poshan_production', document.getElementById('edit-id').value), {
-                    volunteerName: document.getElementById('edit-volunteerName').value,
                     parentName: document.getElementById('edit-parentName').value,
                     childAge: document.getElementById('edit-childAge').value,
                     screenTime: document.getElementById('edit-screenTime').value,
                     primaryDevice: document.getElementById('edit-primaryDevice').value,
                     activityDuration: document.getElementById('edit-activityDuration').value,
-                    description: document.getElementById('edit-description').value,
-                    photoIncludedForNss: document.getElementById('edit-photo').checked
+                    description: document.getElementById('edit-description').value
                 });
                 closeEditModal();
             } catch (error) { alert("Registry Update Failed. Please check connection."); }
@@ -919,7 +964,6 @@
 
             try {
                 await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'nss_poshan_production'), {
-                    volunteerName: document.getElementById('volunteerName').value,
                     parentName: document.getElementById('parentName').value,
                     childAge: selectedAge.value,
                     screenTime: document.getElementById('screenTime').value,
@@ -927,6 +971,7 @@
                     activityDuration: document.getElementById('activityDuration').value,
                     description: document.getElementById('description').value,
                     photoIncludedForNss: hasPhoto,
+                    photoData: currentPhotoBase64, // Pushing the base64 image string directly to DB
                     timestamp: Date.now(),
                     userId: currentUser.uid
                 });
@@ -937,6 +982,7 @@
                 
                 document.getElementById('submission-form').reset();
                 hasPhoto = false;
+                currentPhotoBase64 = null;
                 document.getElementById('photo-placeholder').classList.remove('hidden');
                 document.getElementById('photo-success').classList.add('hidden');
                 document.getElementById('photo-success').classList.remove('flex');
@@ -964,5 +1010,3 @@
     </script>
 </body>
 </html>
-
-
