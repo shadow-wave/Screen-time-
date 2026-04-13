@@ -12,9 +12,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     
-    <!-- Anti-FOUC (Flash of Unstyled Content) Pure CSS Pre-Loader -->
+    <!-- Anti-FOUC Pre-Loader -->
     <style>
-        #app-content { display: none; } /* Hide content until design script loads */
+        #app-content { display: none; } 
         #nss-loader {
             position: fixed; inset: 0; background-color: #f8fafc; z-index: 9999;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -27,10 +27,8 @@
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 
-    <!-- Tailwind CSS Design Engine -->
+    <!-- Tailwind CSS Engine -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Tailwind Configuration -->
     <script>
         tailwind.config = {
             theme: {
@@ -54,7 +52,6 @@
                 }
             }
         }
-        // Remove loader once design engine is ready
         document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
                 document.getElementById('nss-loader').style.display = 'none';
@@ -154,9 +151,19 @@
             <!-- VIEW 1: DATA ENTRY FORM -->
             <section id="view-submit" class="view-section max-w-3xl mx-auto fade-in print-hidden">
                 <div class="bg-white rounded-2xl shadow-official border border-gov-border overflow-hidden">
-                    <div class="bg-gov-light border-b border-gov-border px-6 sm:px-10 py-8 text-center sm:text-left">
-                        <h2 class="text-2xl font-black text-gov-navy uppercase tracking-tight">Community Outreach Record</h2>
-                        <p class="text-sm text-slate-500 font-medium mt-1.5">Action Plan: Screen-Free Early Childhood Development</p>
+                    
+                    <div class="bg-gov-light border-b border-gov-border px-6 sm:px-10 py-8">
+                        <div class="flex flex-col sm:flex-row gap-6 items-center sm:items-start text-center sm:text-left">
+                            <div class="flex-grow">
+                                <h2 class="text-2xl font-black text-gov-navy uppercase tracking-tight">Community Outreach Record</h2>
+                                <p class="text-sm text-slate-500 font-medium mt-1.5">Action Plan: Screen-Free Early Childhood Development</p>
+                            </div>
+                            <!-- OFFICIAL CIRCULAR IMAGE INTEGRATION -->
+                            <div class="flex-shrink-0 w-full sm:w-32 flex flex-col items-center">
+                                <span class="text-[9px] font-bold uppercase tracking-widest text-slate-400 mb-1">Official Mandate</span>
+                                <img src="1000143641.jpg" alt="Official MWCD Circular" class="w-24 sm:w-full rounded border border-slate-300 shadow-sm cursor-pointer hover:opacity-90 transition-opacity" onclick="window.open(this.src, '_blank')" onerror="this.style.display='none'">
+                            </div>
+                        </div>
                     </div>
 
                     <div id="success-message" class="hidden bg-emerald-50 border-b border-emerald-100 p-6 flex items-center justify-center sm:justify-start gap-4 transition-all">
@@ -170,12 +177,23 @@
                     </div>
 
                     <form id="submission-form" class="p-6 sm:p-10 space-y-8">
+                        
+                        <!-- 1. NSS Volunteer Identity -->
+                        <fieldset class="bg-blue-50/50 p-5 rounded-xl border border-blue-100">
+                            <div class="text-xs font-bold text-gov-blue uppercase tracking-widest mb-4 flex items-center gap-2"><i class="ph-fill ph-badge text-base"></i> 1. Data Collector (NSS Volunteer)</div>
+                            <div>
+                                <label for="volunteerName" class="block text-sm font-bold text-gov-navy mb-2">Volunteer Name <span class="text-gov-danger">*</span></label>
+                                <input type="text" id="volunteerName" required placeholder="Enter your full name" class="w-full px-4 py-3 rounded-lg border border-slate-300 bg-white text-sm font-medium text-gov-navy placeholder-slate-400 transition-all"/>
+                            </div>
+                        </fieldset>
+
+                        <!-- 2. Participant Identity -->
                         <fieldset>
-                            <legend class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2 w-full border-b border-slate-100 pb-2"><i class="ph-fill ph-identification-card text-base"></i> 1. Participant Details</legend>
+                            <legend class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2 w-full border-b border-slate-100 pb-2"><i class="ph-fill ph-identification-card text-base"></i> 2. Participant Details</legend>
                             <div class="space-y-6">
                                 <div>
                                     <label for="parentName" class="block text-sm font-bold text-gov-navy mb-2">Participant / Guardian Name <span class="text-gov-danger">*</span></label>
-                                    <input type="text" id="parentName" required placeholder="Enter full name" class="w-full px-4 py-3 rounded-lg border border-slate-300 bg-white text-sm font-medium text-gov-navy placeholder-slate-400 transition-all"/>
+                                    <input type="text" id="parentName" required placeholder="Enter parent/guardian full name" class="w-full px-4 py-3 rounded-lg border border-slate-300 bg-white text-sm font-medium text-gov-navy placeholder-slate-400 transition-all"/>
                                 </div>
                                 
                                 <div>
@@ -249,9 +267,10 @@
                             </div>
                         </fieldset>
 
+                        <!-- 3. Baseline Metrics -->
                         <fieldset class="bg-slate-50 p-5 sm:p-6 rounded-xl border border-slate-200 shadow-inner">
                             <legend class="sr-only">Pre-Intervention Screen Habits</legend>
-                            <div class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2"><i class="ph-fill ph-chart-bar text-base"></i> 2. Pre-Intervention Habits</div>
+                            <div class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2"><i class="ph-fill ph-chart-bar text-base"></i> 3. Pre-Intervention Habits</div>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
                                     <label for="screenTime" class="block text-sm font-bold text-gov-navy mb-1.5">Avg. Daily Screen Time <span class="text-gov-danger">*</span></label>
@@ -284,8 +303,9 @@
                             </div>
                         </fieldset>
 
+                        <!-- 4. Intervention Activity -->
                         <fieldset>
-                            <legend class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2 w-full border-b border-slate-100 pb-2"><i class="ph-fill ph-activity text-base"></i> 3. NSS Intervention Executed</legend>
+                            <legend class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2 w-full border-b border-slate-100 pb-2"><i class="ph-fill ph-activity text-base"></i> 4. NSS Intervention Executed</legend>
                             <div class="space-y-6">
                                 <div>
                                     <label for="description" class="block text-sm font-bold text-gov-navy mb-1.5">Activity Documentation <span class="text-gov-danger">*</span></label>
@@ -312,9 +332,6 @@
                                                 <i class="ph-bold ph-check-circle text-lg"></i> File Attached Securely
                                             </div>
                                         </div>
-                                        <p class="text-[10px] text-slate-500 mt-1.5 font-semibold flex items-center justify-center sm:justify-start gap-1">
-                                            <i class="ph-fill ph-lock-key text-gov-accent"></i> Images are encrypted and hidden from public feeds.
-                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -399,6 +416,7 @@
                     </button>
                 </div>
 
+                <!-- PDF Header -->
                 <div class="hidden print-show mb-6 border-b-2 border-black pb-4 text-center mt-2">
                     <h2 class="text-2xl font-black uppercase tracking-widest leading-tight">Poshan Pakhwada Compliance Report</h2>
                     <h3 class="text-sm font-bold uppercase mt-1">Initiative: Maximizing Early Brain Development</h3>
@@ -414,15 +432,16 @@
                     </div>
                 </div>
 
+                <!-- Admin Table -->
                 <div class="overflow-x-auto rounded-lg border border-gov-border print:border-none print:overflow-visible shadow-sm print:shadow-none bg-white">
                     <table class="w-full text-left border-collapse">
                         <thead>
                             <tr class="bg-gov-light print:bg-transparent text-slate-600 text-[10px] uppercase tracking-widest border-b-2 border-slate-200 print:border-black">
-                                <th class="py-3 px-4 font-bold border-r border-slate-200 print:border-none whitespace-nowrap">Date Logged</th>
-                                <th class="py-3 px-4 font-bold border-r border-slate-200 print:border-none whitespace-nowrap">Participant Identity</th>
-                                <th class="py-3 px-4 font-bold border-r border-slate-200 print:border-none whitespace-nowrap">Baseline Habits</th>
-                                <th class="py-3 px-4 font-bold border-r border-slate-200 print:border-none w-2/5">Intervention Details</th>
-                                <th class="py-3 px-4 font-bold text-center border-r border-slate-200 print:border-none whitespace-nowrap">Doc.</th>
+                                <th class="py-3 px-4 font-bold border-r border-slate-200 print:border-none whitespace-nowrap">Date / ID</th>
+                                <th class="py-3 px-4 font-bold border-r border-slate-200 print:border-none whitespace-nowrap">Target Details</th>
+                                <th class="py-3 px-4 font-bold border-r border-slate-200 print:border-none whitespace-nowrap">Prior Screen Use</th>
+                                <th class="py-3 px-4 font-bold border-r border-slate-200 print:border-none w-2/5">Intervention Activity</th>
+                                <th class="py-3 px-4 font-bold text-center border-r border-slate-200 print:border-none whitespace-nowrap">Media</th>
                                 <th class="py-3 px-4 font-bold text-center print-hidden">Mgmt</th>
                             </tr>
                         </thead>
@@ -432,27 +451,16 @@
                     </table>
                 </div>
                 
+                <!-- Notice the Signatures are removed from here as requested -->
                 <div class="hidden print-show mt-10 pt-4 text-black">
-                    <div class="flex justify-between text-center font-bold text-xs mt-16">
-                        <div class="w-40">
-                            <div class="border-b border-black mb-2 h-10"></div>
-                            Volunteer Secretary<br><span class="font-medium text-[10px]">Group 5</span>
-                        </div>
-                        <div class="w-40">
-                            <div class="border-b border-black mb-2 h-10"></div>
-                            Program Officer<br><span class="font-medium text-[10px]">NSS Unit 30 & 63</span>
-                        </div>
-                        <div class="w-40">
-                            <div class="border-b border-black mb-2 h-10"></div>
-                            Principal<br><span class="font-medium text-[10px]">MG College Iritty</span>
-                        </div>
-                    </div>
+                    <p class="text-[10px] text-justify font-medium leading-relaxed border-t border-slate-300 pt-4">
+                        <strong>Official Declaration:</strong> This document constitutes the compliance report for the community outreach mandate under Poshan Pakhwada. The activities detailed herein were verified and executed by volunteers of NSS Group 5.
+                    </p>
                 </div>
             </section>
 
         </main>
 
-        <!-- Footer -->
         <footer class="mt-16 pb-8 text-center print-hidden border-t border-slate-200/60 pt-6 max-w-7xl mx-auto">
             <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center justify-center gap-1.5"><i class="ph-fill ph-lock-key text-slate-300"></i> Encrypted 256-bit NSS Database</p>
         </footer>
@@ -473,21 +481,25 @@
                     <input type="hidden" id="edit-id" />
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                         <div>
+                            <label for="edit-volunteerName" class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Volunteer Name</label>
+                            <input type="text" id="edit-volunteerName" required class="w-full px-4 py-3 rounded-md border border-slate-300 text-sm font-bold text-gov-navy bg-slate-50 focus:bg-white transition-colors"/>
+                        </div>
+                        <div>
                             <label for="edit-parentName" class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Participant Name</label>
                             <input type="text" id="edit-parentName" required class="w-full px-4 py-3 rounded-md border border-slate-300 text-sm font-bold text-gov-navy bg-slate-50 focus:bg-white transition-colors"/>
                         </div>
                         <div>
                             <label for="edit-childAge" class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Demographic</label>
                             <select id="edit-childAge" required class="w-full px-4 py-3 rounded-md border border-slate-300 text-sm font-bold text-gov-navy bg-slate-50 focus:bg-white transition-colors">
-                                <option value="0-6 months">0-6 Months (Newborn)</option>
-                                <option value="6-12 months">6-12 Months (Infant)</option>
-                                <option value="1-2 years">1-2 Years (Toddler)</option>
-                                <option value="3-4 years">3-4 Years (Early Childhood)</option>
-                                <option value="5-6 years">5-6 Years (Pre-School)</option>
-                                <option value="7-9 years">7-9 Years (Early Primary)</option>
-                                <option value="10-12 years">10-12 Years (Late Primary)</option>
-                                <option value="13-15 years">13-15 Years (Middle School)</option>
-                                <option value="16-18 years">16-18 Years (High School)</option>
+                                <option value="0-6 months">0-6 Months</option>
+                                <option value="6-12 months">6-12 Months</option>
+                                <option value="1-2 years">1-2 Years</option>
+                                <option value="3-4 years">3-4 Years</option>
+                                <option value="5-6 years">5-6 Years</option>
+                                <option value="7-9 years">7-9 Years</option>
+                                <option value="10-12 years">10-12 Years</option>
+                                <option value="13-15 years">13-15 Years</option>
+                                <option value="16-18 years">16-18 Years</option>
                             </select>
                         </div>
                         <div>
@@ -509,27 +521,25 @@
                                 <option value="None">None</option>
                             </select>
                         </div>
-                    </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-5 border-t border-slate-100 pt-6">
-                        <div class="sm:col-span-2">
-                            <label for="edit-description" class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Activity Description</label>
-                            <textarea id="edit-description" required rows="2" class="w-full px-4 py-3 rounded-md border border-slate-300 text-sm font-medium text-gov-navy resize-none bg-slate-50 focus:bg-white transition-colors"></textarea>
-                        </div>
                         <div>
                             <label for="edit-activityDuration" class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Duration</label>
-                            <input type="text" id="edit-activityDuration" required class="w-full h-[62px] px-4 rounded-md border border-slate-300 text-sm font-bold text-gov-navy bg-slate-50 focus:bg-white transition-colors"/>
+                            <input type="text" id="edit-activityDuration" required class="w-full px-4 py-3 rounded-md border border-slate-300 text-sm font-bold text-gov-navy bg-slate-50 focus:bg-white transition-colors"/>
                         </div>
                     </div>
-                    <div class="flex items-center gap-3 p-4 bg-slate-50 border border-slate-200 rounded-lg">
+                    <div>
+                        <label for="edit-description" class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Activity Description</label>
+                        <textarea id="edit-description" required rows="2" class="w-full px-4 py-3 rounded-md border border-slate-300 text-sm font-medium text-gov-navy resize-none bg-slate-50 focus:bg-white transition-colors"></textarea>
+                    </div>
+                    <div class="flex items-center gap-3 p-3 bg-slate-50 border border-slate-200 rounded-md">
                         <input type="checkbox" id="edit-photo" class="w-5 h-5 accent-gov-accent cursor-pointer">
                         <label for="edit-photo" class="text-sm font-bold text-gov-navy cursor-pointer">Image Verification Document Attached</label>
                     </div>
                 </form>
             </div>
             
-            <div class="p-5 bg-white border-t border-slate-200 flex gap-4 flex-shrink-0">
-                <button type="button" onclick="closeEditModal()" class="flex-1 px-4 py-3.5 bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 rounded-lg text-xs font-bold transition-all uppercase tracking-widest">Cancel</button>
-                <button type="submit" form="edit-form" class="flex-1 px-4 py-3.5 bg-gov-accent hover:bg-blue-700 text-white rounded-lg text-xs font-bold transition-all uppercase tracking-widest shadow-md">Update Registry</button>
+            <div class="p-4 bg-slate-50 border-t border-slate-200 flex gap-3 flex-shrink-0">
+                <button type="button" onclick="closeEditModal()" class="flex-1 px-4 py-2.5 bg-white border border-slate-300 hover:bg-slate-100 text-slate-700 rounded-md text-sm font-bold transition-all uppercase tracking-widest">Cancel</button>
+                <button type="submit" form="edit-form" class="flex-1 px-4 py-2.5 bg-gov-accent hover:bg-blue-700 text-white rounded-md text-sm font-bold transition-all uppercase tracking-widest shadow-sm">Save Changes</button>
             </div>
         </div>
     </div>
@@ -537,15 +547,15 @@
     <!-- Delete Confirmation Modal -->
     <div id="delete-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 print-hidden">
         <div class="absolute inset-0 modal-bg transition-opacity" onclick="closeDeleteModal()"></div>
-        <div class="bg-white rounded-2xl shadow-modal w-full max-w-sm relative z-10 fade-in p-8 text-center border-t-[5px] border-gov-danger">
-            <div class="w-20 h-20 bg-red-50 text-gov-danger border border-red-100 rounded-full flex items-center justify-center mx-auto mb-5">
-                <i class="ph-bold ph-warning text-4xl"></i>
+        <div class="bg-white rounded-2xl shadow-modal w-full max-w-sm relative z-10 fade-in p-8 text-center border-t-[5px] border-red-600">
+            <div class="w-20 h-20 bg-red-50 text-red-600 border border-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="ph-bold ph-warning text-3xl"></i>
             </div>
-            <h3 class="font-black text-xl text-gov-navy mb-2 uppercase tracking-tight">Purge Record?</h3>
+            <h3 class="font-black text-lg text-gov-navy mb-2 uppercase tracking-wide">Purge Record?</h3>
             <p class="text-sm text-slate-500 mb-8 font-medium">This action is irreversible and removes data from the official PDF report.</p>
             <div class="flex flex-col gap-3">
-                <button type="button" id="confirm-delete-btn" class="w-full px-4 py-4 bg-gov-danger hover:bg-red-700 text-white rounded-lg font-bold text-xs uppercase tracking-widest transition-all shadow-md">Confirm Deletion</button>
-                <button type="button" onclick="closeDeleteModal()" class="w-full px-4 py-4 bg-white border border-slate-300 hover:bg-slate-50 text-slate-600 rounded-lg font-bold text-xs uppercase tracking-widest transition-all">Cancel</button>
+                <button type="button" id="confirm-delete-btn" class="w-full px-4 py-3 bg-red-600 hover:bg-red-700 text-white rounded-md font-bold text-sm uppercase tracking-widest transition-all shadow-sm">Confirm Deletion</button>
+                <button type="button" onclick="closeDeleteModal()" class="w-full px-4 py-3 bg-white border border-slate-300 hover:bg-slate-100 text-slate-600 rounded-md font-bold text-sm uppercase tracking-widest transition-all">Cancel</button>
             </div>
         </div>
     </div>
@@ -656,6 +666,7 @@
 
         function updateServerStatus(isConnected) {
             const statusBadge = document.getElementById('server-status-badge');
+            if(!statusBadge) return;
             const statusDot = document.getElementById('server-dot');
             const statusText = document.getElementById('server-text');
 
@@ -733,6 +744,7 @@
                     let photoBadge = post.photoIncludedForNss 
                         ? `<span class="inline-flex items-center gap-1.5 text-[10px] text-emerald-700 font-bold bg-emerald-50 py-1.5 px-2.5 rounded-md border border-emerald-200 uppercase tracking-widest"><i class="ph-bold ph-check-circle text-sm"></i> Validated</span>` : '';
                     
+                    const vName = post.volunteerName || "N/A";
                     const sTime = post.screenTime || "N/A";
                     const sDev = post.primaryDevice || "N/A";
                     const aDur = post.activityDuration || "N/A";
@@ -755,6 +767,10 @@
                             <div><span class="text-slate-400 block text-[9px] uppercase tracking-widest font-bold mb-0.5">Play Duration</span><span class="text-gov-navy font-bold">${aDur}</span></div>
                         </div>
                         <p class="text-slate-700 text-sm leading-relaxed font-medium">"${post.description}"</p>
+                        <div class="mt-4 pt-3 border-t border-slate-100 flex items-center gap-2">
+                            <i class="ph-fill ph-badge text-gov-blue"></i>
+                            <span class="text-[10px] uppercase tracking-widest font-bold text-slate-400">Logged by: <span class="text-gov-navy">${vName}</span></span>
+                        </div>
                     </div>`);
                 });
             }
@@ -765,6 +781,7 @@
             const filteredData = globalSubmissions.filter(post => 
                 post.parentName.toLowerCase().includes(query) || 
                 post.description.toLowerCase().includes(query) ||
+                (post.volunteerName && post.volunteerName.toLowerCase().includes(query)) ||
                 (post.primaryDevice && post.primaryDevice.toLowerCase().includes(query))
             );
 
@@ -783,6 +800,7 @@
                     ? '<span class="inline-flex items-center justify-center w-6 h-6 rounded bg-emerald-100 text-emerald-700"><i class="ph-bold ph-check"></i></span>' 
                     : '<span class="text-slate-300 font-bold">-</span>';
 
+                const vName = post.volunteerName || "N/A";
                 const sTime = post.screenTime || "N/A";
                 const sDev = post.primaryDevice || "N/A";
                 const aDur = post.activityDuration || "N/A";
@@ -791,14 +809,17 @@
                 <tr class="border-b border-slate-200 hover:bg-slate-50 transition-colors print:break-inside-avoid">
                     <td class="py-3 px-4 text-slate-600 font-medium text-xs border-r border-slate-200 print:border-none whitespace-nowrap">${dateStr}</td>
                     <td class="py-3 px-4 border-r border-slate-200 print:border-none whitespace-nowrap">
+                        <div class="text-[9px] text-slate-400 font-bold uppercase tracking-widest mb-0.5">Participant</div>
                         <div class="font-bold text-gov-navy">${post.parentName}</div>
                         <div class="text-[9px] text-gov-accent font-bold uppercase tracking-widest mt-0.5">${post.childAge}</div>
+                        <div class="text-[9px] text-slate-400 font-bold uppercase tracking-widest mt-2 mb-0.5">Collector</div>
+                        <div class="text-xs font-bold text-gov-navy">${vName}</div>
                     </td>
-                    <td class="py-3 px-4 border-r border-slate-200 print:border-none whitespace-nowrap">
+                    <td class="py-3 px-4 border-r border-slate-200 print:border-none whitespace-nowrap align-top pt-4">
                         <div class="font-semibold text-slate-700 text-xs">${sDev}</div>
                         <div class="text-[9px] text-slate-500 font-bold tracking-widest mt-0.5">${sTime}</div>
                     </td>
-                    <td class="py-3 px-4 border-r border-slate-200 print:border-none">
+                    <td class="py-3 px-4 border-r border-slate-200 print:border-none align-top pt-4">
                         <div class="font-medium text-slate-700 text-sm leading-snug">${post.description}</div>
                         <div class="text-[9px] text-slate-500 font-bold uppercase tracking-widest mt-1.5">Duration: <span class="text-gov-navy">${aDur}</span></div>
                     </td>
@@ -815,6 +836,7 @@
             const post = globalSubmissions.find(p => p.id === id);
             if(!post) return;
             document.getElementById('edit-id').value = post.id;
+            document.getElementById('edit-volunteerName').value = post.volunteerName || "";
             document.getElementById('edit-parentName').value = post.parentName;
             document.getElementById('edit-childAge').value = post.childAge;
             document.getElementById('edit-screenTime').value = post.screenTime || "";
@@ -836,6 +858,7 @@
             if (!currentUser) return;
             try {
                 await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'nss_poshan_production', document.getElementById('edit-id').value), {
+                    volunteerName: document.getElementById('edit-volunteerName').value,
                     parentName: document.getElementById('edit-parentName').value,
                     childAge: document.getElementById('edit-childAge').value,
                     screenTime: document.getElementById('edit-screenTime').value,
@@ -896,6 +919,7 @@
 
             try {
                 await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'nss_poshan_production'), {
+                    volunteerName: document.getElementById('volunteerName').value,
                     parentName: document.getElementById('parentName').value,
                     childAge: selectedAge.value,
                     screenTime: document.getElementById('screenTime').value,
@@ -940,3 +964,5 @@
     </script>
 </body>
 </html>
+
+
