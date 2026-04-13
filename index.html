@@ -1,4 +1,4 @@
-<meta name='viewport' content='width=device-width, initial-scale=1'/>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -100,11 +100,18 @@
     <div id="nss-loader">
         <div class="loader-circle"></div>
         <h2 style="color: #0f172a; font-weight: 800; font-size: 1.2rem;">Establishing Secure Connection</h2>
-        <p style="color: #64748b; font-size: 0.875rem; font-weight: 600; margin-top: 8px;">NSS Official Portal • Loading Interface...</p>
+        <p style="color: #64748b; font-size: 0.875rem; font-weight: 600; margin-top: 8px;">NSS Official Portal â€¢ Loading Interface...</p>
     </div>
 
-    <!-- Main Application Content (Hidden until design loads) -->
+    <!-- Main Application Content -->
     <div id="app-content" class="pb-20 print:pb-0">
+        
+        <!-- FLOATING SERVER INDICATOR -->
+        <div class="fixed bottom-4 right-4 bg-white border border-slate-200 px-3 py-2 rounded-full shadow-floating flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-amber-500 z-50 print:hidden transition-all" id="server-status-badge">
+            <span class="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse" id="server-dot"></span>
+            <span id="server-text">Connecting...</span>
+        </div>
+
         <!-- HEADER -->
         <header class="bg-white border-b border-gov-border shadow-sm sticky top-0 z-40 print:relative print:border-none print:shadow-none transition-all">
             <div class="h-1.5 w-full bg-gov-blue print:bg-black"></div>
@@ -113,7 +120,7 @@
                     <img src="college-image.png" alt="College Logo" class="h-14 sm:h-16 w-auto object-contain" onerror="this.src='https://ui-avatars.com/api/?name=MG+C&background=0f172a&color=fff&rounded=true&bold=true&size=128'" id="college-logo">
                     <div class="text-center md:text-left border-l-2 border-slate-200 pl-4 print:border-black">
                         <h1 class="text-lg sm:text-2xl font-black text-gov-navy tracking-tight uppercase print:text-black leading-tight">Mahatma Gandhi College Iritty</h1>
-                        <h2 class="text-xs sm:text-sm font-bold text-gov-blue tracking-widest uppercase mt-0.5 print:text-black">NSS Unit 30 & 63 • Group 5</h2>
+                        <h2 class="text-xs sm:text-sm font-bold text-gov-blue tracking-widest uppercase mt-0.5 print:text-black">NSS Unit 30 & 63 â€¢ Group 5</h2>
                     </div>
                 </div>
                 <div class="flex items-center gap-6">
@@ -259,6 +266,7 @@
                                         <i class="ph-bold ph-caret-down absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"></i>
                                     </div>
                                 </div>
+
                                 <div>
                                     <label for="primaryDevice" class="block text-sm font-bold text-gov-navy mb-1.5">Primary Device Used <span class="text-gov-danger">*</span></label>
                                     <div class="relative">
@@ -341,7 +349,7 @@
             </section>
 
             <!-- VIEW 3: ADMIN LOGIN -->
-            <section id="view-admin-login" class="view-section hidden max-w-md mx-auto mt-12 fade-in print-hidden">
+            <section id="view-admin_login" class="view-section hidden max-w-md mx-auto mt-12 fade-in print-hidden">
                 <div class="bg-white rounded-xl shadow-floating border border-gov-border overflow-hidden">
                     <div class="bg-gov-navy px-8 py-6 text-center">
                         <div class="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-4 border border-white/20">
@@ -354,7 +362,7 @@
                     <form id="admin-login-form" class="p-8">
                         <div class="mb-6">
                             <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2 text-center">Authorization PIN</label>
-                            <input type="password" id="adminPin" placeholder="•••••••" autocomplete="off" class="w-full px-4 py-4 rounded-md border border-slate-300 focus:border-gov-accent text-center tracking-[0.5em] font-mono text-xl bg-slate-50 transition-colors font-bold"/>
+                            <input type="password" id="adminPin" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢" autocomplete="off" class="w-full px-4 py-4 rounded-md border border-slate-300 focus:border-gov-accent text-center tracking-[0.5em] font-mono text-xl bg-slate-50 transition-colors font-bold"/>
                             <p id="login-error" class="text-red-600 text-xs font-bold text-center mt-2 hidden">Invalid Credentials.</p>
                         </div>
                         <button type="submit" class="w-full bg-gov-accent hover:bg-blue-700 text-white font-bold py-3.5 px-4 rounded-md transition-all shadow-md uppercase tracking-widest text-sm flex items-center justify-center gap-2">
@@ -365,17 +373,17 @@
             </section>
 
             <!-- VIEW 4: ADMIN DASHBOARD -->
-            <section id="view-admin-dashboard" class="view-section hidden bg-white sm:rounded-xl shadow-official border border-gov-border p-5 sm:p-8 print:border-none print:shadow-none print:p-0 fade-in">
+            <section id="view-admin_dashboard" class="view-section hidden bg-white sm:rounded-xl shadow-official border border-gov-border p-5 sm:p-8 print:border-none print:shadow-none print:p-0 fade-in">
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4 border-b border-slate-100 pb-6 print-hidden">
                     <div>
                         <h2 class="text-2xl font-black text-gov-navy uppercase tracking-tight flex items-center gap-2"><i class="ph-fill ph-database text-gov-accent"></i> Central Registry</h2>
                         <p class="text-sm text-slate-500 font-medium mt-1.5">NSS Program Officer Management Console</p>
                     </div>
-                    <div class="flex flex-wrap gap-3">
-                        <button onclick="window.print()" class="bg-gov-navy hover:bg-gov-blue text-white px-5 py-2.5 rounded-md shadow-sm text-sm font-bold flex items-center gap-2 transition-colors">
+                    <div class="flex gap-3">
+                        <button onclick="window.print()" class="bg-gov-navy hover:bg-gov-blue text-white px-4 py-2.5 rounded-md shadow-sm text-sm font-bold flex items-center gap-2 transition-colors">
                             <i class="ph-bold ph-printer text-lg"></i> Export PDF
                         </button>
-                        <button onclick="logoutAdmin()" class="bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 px-5 py-2.5 rounded-md shadow-sm text-sm font-bold transition-colors">
+                        <button onclick="logoutAdmin()" class="bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 px-4 py-2.5 rounded-md shadow-sm text-sm font-bold transition-colors">
                             Secure Logout
                         </button>
                     </div>
@@ -391,7 +399,7 @@
                     </button>
                 </div>
 
-                <div class="hidden print-show mb-6 border-b-[3px] border-black pb-4 text-center mt-2">
+                <div class="hidden print-show mb-6 border-b-2 border-black pb-4 text-center mt-2">
                     <h2 class="text-2xl font-black uppercase tracking-widest leading-tight">Poshan Pakhwada Compliance Report</h2>
                     <h3 class="text-sm font-bold uppercase mt-1">Initiative: Maximizing Early Brain Development</h3>
                     <div class="flex justify-between items-end text-xs font-bold mt-6">
@@ -640,8 +648,27 @@
                 } else {
                     await signInAnonymously(auth);
                 }
-            } catch (error) { console.error("Firebase Auth Fail", error); }
+            } catch (error) { 
+                console.error("Firebase Auth Fail", error); 
+                updateServerStatus(false);
+            }
         };
+
+        function updateServerStatus(isConnected) {
+            const statusBadge = document.getElementById('server-status-badge');
+            const statusDot = document.getElementById('server-dot');
+            const statusText = document.getElementById('server-text');
+
+            if (isConnected) {
+                statusDot.className = "w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse";
+                statusText.className = "text-emerald-700";
+                statusText.innerText = "Server Online: nsss-b34aa";
+            } else {
+                statusDot.className = "w-2.5 h-2.5 rounded-full bg-red-500";
+                statusText.className = "text-red-700";
+                statusText.innerText = "Disconnected";
+            }
+        }
 
         onAuthStateChanged(auth, (user) => {
             currentUser = user;
@@ -654,12 +681,14 @@
                 btn.classList.remove('opacity-50', 'cursor-not-allowed');
                 btnText.innerText = "Submit Official Record";
                 btnIcon.className = "ph-bold ph-paper-plane-tilt text-lg";
+                updateServerStatus(true);
                 loadData();
             } else {
                 btn.disabled = true; 
                 btn.classList.add('opacity-50', 'cursor-not-allowed');
                 btnText.innerText = "Connecting to Secure Server...";
                 btnIcon.className = "ph-bold ph-spinner spinner text-lg";
+                updateServerStatus(false);
             }
         });
         
@@ -678,7 +707,10 @@
                 renderFeed(data);
                 
                 if(isAdminActive) renderTable();
-            }, (error) => { console.error("Firestore Sync Error", error); });
+            }, (error) => { 
+                console.error("Firestore Sync Error", error); 
+                updateServerStatus(false);
+            });
         };
 
         window.handleSearch = function() { if(isAdminActive) renderTable(); };
@@ -713,7 +745,7 @@
                                 <h3 class="text-lg font-black text-gov-navy tracking-tight">${post.parentName}</h3>
                                 <div class="flex items-center gap-2 mt-1">
                                     <span class="text-[10px] text-gov-accent font-bold uppercase tracking-widest bg-blue-50 px-2 py-0.5 rounded border border-blue-100">${post.childAge}</span>
-                                    <span class="text-xs font-semibold text-slate-400">• ${dateStr}</span>
+                                    <span class="text-xs font-semibold text-slate-400">â€¢ ${dateStr}</span>
                                 </div>
                             </div>
                             ${photoBadge}
@@ -908,5 +940,3 @@
     </script>
 </body>
 </html>
-
-
