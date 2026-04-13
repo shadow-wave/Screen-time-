@@ -6,29 +6,24 @@
     <title>NSS Unit 30 & 63 | Poshan Pakhwada Official Portal</title>
     <meta name="description" content="Official NSS portal for logging 7-day screen-free early childhood development activities.">
     
-    <!-- Enterprise Font: Inter -->
+    <!-- Enterprise Font: Inter for highest legibility -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     
-    <!-- FIX: Pure CSS Pre-Loader (Will NEVER get stuck on a blank screen) -->
+    <!-- Anti-FOUC Automated Loading Screen -->
     <style>
+        #app-content { display: none; }
         #nss-loader {
             position: fixed; inset: 0; background-color: #f8fafc; z-index: 9999;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            font-family: 'Inter', sans-serif;
-            /* Auto-hides after 1.2 seconds safely using pure CSS */
-            animation: hideLoader 0.6s ease 1.2s forwards; 
+            font-family: 'Inter', sans-serif; transition: opacity 0.4s ease;
         }
         .loader-circle {
             width: 48px; height: 48px; border: 4px solid #e2e8f0; border-top: 4px solid #1e3a8a;
             border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 24px;
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        @keyframes hideLoader {
-            0% { opacity: 1; pointer-events: all; }
-            100% { opacity: 0; visibility: hidden; pointer-events: none; z-index: -1; }
-        }
     </style>
 
     <!-- Tailwind CSS Design Engine -->
@@ -42,13 +37,13 @@
                     fontFamily: { sans: ['Inter', 'sans-serif'], },
                     colors: {
                         gov: {
-                            navy: '#0f172a',    
-                            blue: '#1e3a8a',    
-                            accent: '#2563eb',  
-                            light: '#f8fafc',   
-                            border: '#e2e8f0',  
-                            success: '#059669', 
-                            danger: '#dc2626'   
+                            navy: '#0f172a',    /* Slate 900 */
+                            blue: '#1e3a8a',    /* Blue 900 */
+                            accent: '#2563eb',  /* Blue 600 */
+                            light: '#f8fafc',   /* Slate 50 */
+                            border: '#cbd5e1',  /* Slate 300 - High Contrast */
+                            success: '#059669', /* Emerald 600 */
+                            danger: '#dc2626'   /* Red 600 */
                         }
                     },
                     boxShadow: {
@@ -58,53 +53,81 @@
                 }
             }
         }
+        
+        // Remove loading screen gracefully once UI is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                const loader = document.getElementById('nss-loader');
+                const appContent = document.getElementById('app-content');
+                if(loader) {
+                    loader.style.opacity = '0';
+                    setTimeout(() => {
+                        loader.style.display = 'none';
+                        if(appContent) appContent.style.display = 'block';
+                    }, 400);
+                } else if (appContent) {
+                    appContent.style.display = 'block';
+                }
+            }, 500);
+        });
     </script>
 
     <!-- Phosphor Icons -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     
-    <!-- Core Application Styles -->
+    <!-- Core Application & Accessibility Styles -->
     <style>
         body { -webkit-font-smoothing: antialiased; background-color: #f1f5f9; min-height: 100vh; }
         
+        /* Smooth Content Transitions */
         .fade-in { animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
         
+        /* Premium Scrollbar */
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: #f8fafc; border-radius: 4px; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
         
+        /* High Accessibility Focus States */
         input:focus, select:focus, textarea:focus, button:focus-visible { 
-            outline: none; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2); border-color: #2563eb !important; 
+            outline: none; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.3); border-color: #2563eb !important; 
         }
+        
+        /* Hide native radio buttons for custom touch grids */
         input[type="radio"].peer { display: none; }
+        
         .modal-bg { background-color: rgba(15, 23, 42, 0.8); backdrop-filter: blur(4px); }
 
-        /* --- FLAWLESS MASTER PDF ENGINE --- */
+        /* --- FLAWLESS MASTER PDF EXPORT ENGINE --- */
         @media print {
             @page { margin: 12mm 15mm; size: A4 portrait; }
             body { background: white !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; margin: 0; padding: 0; }
             
-            /* Completely hide web UI components during PDF export */
+            /* Hide the web interface components */
             #app-content > header, #app-content > nav, #app-content > main, #app-content > footer, #server-status-badge, .modal-bg { display: none !important; }
+            
+            /* Reveal the dedicated print container */
             #print-container { display: block !important; width: 100%; }
             
-            /* A4 Page Formatting: One Participant Per Page */
+            /* Structure 1 Participant Per Page */
             .print-page {
                 width: 100%; padding: 0; box-sizing: border-box;
                 page-break-after: always; display: flex; flex-direction: column; background-color: white; position: relative; min-height: 270mm;
             }
             
+            /* Official Header */
             .print-header { border-bottom: 3px solid #0f172a; padding-bottom: 12px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: flex-end; }
             .print-title { font-size: 16pt; font-weight: 900; color: #0f172a; text-transform: uppercase; margin: 0; letter-spacing: 0.5px; }
             .print-subtitle { font-size: 9pt; font-weight: 700; color: #475569; margin-top: 4px; }
             
-            .print-master-info { background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 12px 15px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px; }
+            /* Master Data Ribbon */
+            .print-master-info { background-color: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 12px 15px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px; }
             .print-info-block { display: flex; flex-direction: column; }
             .print-info-label { font-size: 7.5pt; font-weight: 800; color: #64748b; text-transform: uppercase; margin-bottom: 2px; }
             .print-info-value { font-size: 10pt; font-weight: 800; color: #0f172a; }
             
+            /* Consolidated Weekly Table */
             .print-section-title { font-size: 10pt; font-weight: 800; color: #1e3a8a; text-transform: uppercase; margin-bottom: 8px; border-bottom: 1px solid #cbd5e1; padding-bottom: 4px; }
             .print-weekly-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; table-layout: fixed; }
             .print-weekly-table th { background-color: #0f172a !important; color: white !important; font-size: 8pt; font-weight: 800; text-transform: uppercase; padding: 8px; text-align: left; border: 1px solid #0f172a; }
@@ -112,9 +135,11 @@
             .print-weekly-table tr { page-break-inside: avoid; }
             .print-weekly-table tr:nth-child(even) td { background-color: #f8fafc !important; }
             
+            /* Specific Print Elements */
             .print-day-badge { display: inline-block; background-color: #e0f2fe !important; color: #1e3a8a !important; font-weight: 800; font-size: 7.5pt; padding: 2px 6px; border-radius: 4px; margin-bottom: 4px; border: 1px solid #bae6fd !important; }
-            .print-img { max-width: 55px; max-height: 55px; object-fit: cover; border: 1px solid #cbd5e1; border-radius: 4px; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+            .print-img { max-width: 50px; max-height: 50px; object-fit: cover; border: 1px solid #cbd5e1; border-radius: 4px; display: block; margin: 0 auto;}
             
+            /* Authorized Signatures Bottom Anchored */
             .print-sig-area { margin-top: auto; display: flex; justify-content: space-between; padding-top: 20px; page-break-inside: avoid; }
             .print-sig-block { width: 45mm; text-align: center; }
             .print-sig-line { border-top: 1px solid #000; margin-bottom: 5px; }
@@ -132,16 +157,16 @@
         <p style="color: #64748b; font-size: 0.875rem; font-weight: 600; margin-top: 8px;">NSS Official Portal • Loading Interface...</p>
     </div>
 
-    <!-- Live Server Status Badge -->
-    <div class="fixed bottom-4 right-4 bg-white border border-slate-200 px-3 py-2 rounded-full shadow-official flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-amber-500 z-50 print:hidden transition-all duration-300" id="server-status-badge">
+    <!-- Server Status Indicator (Live Diagnostic) -->
+    <div class="fixed bottom-4 right-4 bg-white border border-gov-border px-3 py-2 rounded-full shadow-official flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-amber-500 z-50 print:hidden transition-colors duration-300" id="server-status-badge">
         <span class="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse" id="server-dot"></span>
         <span id="server-text">Connecting...</span>
     </div>
 
-    <!-- PRINT CONTAINER (Populated dynamically during PDF Export) -->
+    <!-- PRINT CONTAINER (Hidden until PDF generation) -->
     <div id="print-container" style="display: none;"></div>
 
-    <!-- MAIN APPLICATION UI -->
+    <!-- MAIN APPLICATION GUI -->
     <div id="app-content" class="pb-24">
         
         <!-- Header -->
@@ -149,7 +174,8 @@
             <div class="h-1.5 w-full bg-gov-blue"></div>
             <div class="max-w-7xl mx-auto px-4 py-3 sm:py-4 flex flex-col md:flex-row items-center justify-between gap-4">
                 <div class="flex items-center gap-4 w-full md:w-auto justify-center md:justify-start">
-                    <img src="college-image.png" alt="College Logo" class="h-14 sm:h-16 w-auto object-contain" onerror="this.src='https://ui-avatars.com/api/?name=MG+C&background=0f172a&color=fff&rounded=true&bold=true&size=128'" id="college-logo">
+                    <!-- Ensure logos exist in root dir -->
+                    <img src="college-image.png" alt="College Logo" class="h-14 sm:h-16 w-auto object-contain" onerror="this.src='https://ui-avatars.com/api/?name=MG+C&background=0f172a&color=fff&rounded=true&bold=true&size=128'">
                     <div class="text-center md:text-left border-l-2 border-slate-200 pl-4">
                         <h1 class="text-lg sm:text-2xl font-black text-gov-navy tracking-tight uppercase leading-tight">Mahatma Gandhi College Iritty</h1>
                         <h2 class="text-xs sm:text-sm font-bold text-gov-blue tracking-widest uppercase mt-0.5">NSS Unit 30 & 63 • Group 5</h2>
@@ -158,24 +184,24 @@
                 <div class="flex items-center gap-6">
                     <div class="hidden lg:flex flex-col items-end">
                         <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">7-Day Outreach Log</span>
-                        <span class="text-sm font-bold text-gov-navy bg-slate-50 px-3 py-1 rounded-md border border-slate-200 mt-1 shadow-sm">Poshan Pakhwada 2026</span>
+                        <span class="text-sm font-bold text-gov-navy bg-slate-50 px-3 py-1 rounded-md border border-gov-border mt-1 shadow-sm">Poshan Pakhwada 2026</span>
                     </div>
-                    <img src="nss-image.png" alt="NSS Logo" class="h-14 sm:h-16 w-auto object-contain hidden md:block" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/National_Service_Scheme_%28NSS%29_logo.svg/512px-National_Service_Scheme_%28NSS%29_logo.svg.png'" id="nss-logo">
+                    <img src="nss-image.png" alt="NSS Logo" class="h-14 sm:h-16 w-auto object-contain hidden md:block" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/National_Service_Scheme_%28NSS%29_logo.svg/512px-National_Service_Scheme_%28NSS%29_logo.svg.png'">
                 </div>
             </div>
         </header>
 
-        <!-- Navigation -->
+        <!-- Main Routing Navigation -->
         <nav class="max-w-7xl mx-auto px-4 mt-6 sm:mt-8">
             <div class="flex flex-wrap items-center justify-center md:justify-start gap-2 bg-white p-2 rounded-xl shadow-official border border-gov-border">
-                <button id="nav-submit" onclick="switchView('submit')" class="nav-btn flex-1 md:flex-none flex items-center justify-center gap-2 px-5 sm:px-6 py-3 rounded-lg text-sm font-bold transition-all bg-gov-navy text-white shadow-sm">
+                <button id="nav-submit" onclick="window.switchView('submit')" class="nav-btn flex-1 md:flex-none flex items-center justify-center gap-2 px-5 sm:px-6 py-3 rounded-lg text-sm font-bold transition-all bg-gov-navy text-white shadow-sm" aria-label="Open Data Entry Form">
                     <i class="ph-bold ph-pencil-line text-lg"></i> Log Data
                 </button>
-                <button id="nav-feed" onclick="switchView('feed')" class="nav-btn flex-1 md:flex-none flex items-center justify-center gap-2 px-5 sm:px-6 py-3 rounded-lg text-sm font-bold transition-all text-slate-600 hover:bg-slate-50 hover:text-gov-navy">
+                <button id="nav-feed" onclick="window.switchView('feed')" class="nav-btn flex-1 md:flex-none flex items-center justify-center gap-2 px-5 sm:px-6 py-3 rounded-lg text-sm font-bold transition-all text-slate-600 hover:bg-slate-50 hover:text-gov-navy" aria-label="View Public Feed">
                     <i class="ph-bold ph-list-dashes text-lg"></i> Public Feed (<span id="feed-count">0</span>)
                 </button>
                 <div class="w-px h-8 bg-slate-200 mx-2 hidden md:block"></div>
-                <button id="nav-admin" onclick="switchView('admin_login')" class="nav-btn w-full mt-2 md:mt-0 md:w-auto md:flex-none flex items-center justify-center gap-2 px-5 sm:px-6 py-3 rounded-lg text-sm font-bold transition-all text-gov-accent hover:bg-blue-50 border border-transparent hover:border-blue-100">
+                <button id="nav-admin" onclick="window.switchView('admin_login')" class="nav-btn w-full mt-2 md:mt-0 md:w-auto md:flex-none flex items-center justify-center gap-2 px-5 sm:px-6 py-3 rounded-lg text-sm font-bold transition-all text-gov-accent hover:bg-blue-50 border border-transparent hover:border-blue-100" aria-label="Access Admin Portal">
                     <i class="ph-bold ph-shield-check text-lg"></i> Admin Portal
                 </button>
             </div>
@@ -186,19 +212,19 @@
             <!-- ========================================== -->
             <!-- VIEW 1: DATA ENTRY FORM                    -->
             <!-- ========================================== -->
-            <section id="view-submit" class="view-section max-w-3xl mx-auto fade-in print-hidden">
+            <section id="view-submit" class="view-section max-w-3xl mx-auto fade-in">
                 <div class="bg-white rounded-2xl shadow-official border border-gov-border overflow-hidden">
                     <div class="bg-gov-light border-b border-gov-border px-6 sm:px-10 py-6 sm:py-8 flex flex-col sm:flex-row justify-between items-center gap-4">
                         <div class="text-center sm:text-left">
                             <h2 class="text-xl sm:text-2xl font-black text-gov-navy uppercase tracking-tight">7-Day Outreach Log</h2>
                             <p class="text-sm text-slate-500 font-medium mt-1">Record screen-free early childhood activities.</p>
                         </div>
-                        <div id="smart-memory-badge" class="hidden items-center gap-1.5 bg-blue-50 border border-blue-200 text-gov-accent px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-widest shadow-sm transition-all">
+                        <div id="smart-memory-badge" class="hidden items-center gap-1.5 bg-blue-50 border border-blue-200 text-gov-accent px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-widest shadow-sm transition-all" aria-hidden="true">
                             <i class="ph-bold ph-magic-wand"></i> Auto-Filled
                         </div>
                     </div>
 
-                    <!-- Success Alert -->
+                    <!-- Submission Success Alert -->
                     <div id="success-message" class="hidden bg-emerald-50 border-b border-emerald-100 p-6 flex flex-col sm:flex-row items-center text-center sm:text-left gap-4 transition-all">
                         <div class="w-12 h-12 bg-emerald-100 rounded-full flex items-center justify-center flex-shrink-0 text-gov-success shadow-sm">
                             <i class="ph-bold ph-check text-2xl"></i>
@@ -209,10 +235,11 @@
                         </div>
                     </div>
 
-                    <form id="submission-form" class="p-6 sm:p-10 space-y-8">
+                    <!-- Hard-wired onsubmit event for bulletproof execution -->
+                    <form id="submission-form" onsubmit="window.submitMainForm(event)" class="p-6 sm:p-10 space-y-8">
                         
-                        <!-- 1. Master Identity -->
-                        <fieldset class="bg-slate-50 p-5 sm:p-6 rounded-xl border border-slate-200 shadow-inner">
+                        <!-- Block 1: Master Identity -->
+                        <fieldset class="bg-slate-50 p-5 sm:p-6 rounded-xl border border-gov-border shadow-inner">
                             <legend class="sr-only">Master Identity</legend>
                             <div class="text-xs font-bold text-gov-navy uppercase tracking-widest mb-4 flex items-center gap-2"><i class="ph-fill ph-identification-card text-base"></i> 1. Master Identification</div>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
@@ -220,56 +247,56 @@
                                     <label for="volunteerName" class="block text-sm font-bold text-gov-navy mb-2">Volunteer Name <span class="text-gov-danger">*</span></label>
                                     <div class="relative">
                                         <i class="ph-bold ph-user-circle absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-lg"></i>
-                                        <input type="text" id="volunteerName" required placeholder="Enter your full name" class="w-full pl-12 pr-4 py-3 sm:py-3.5 rounded-lg border border-slate-300 bg-white text-sm font-bold text-gov-navy placeholder-slate-400 transition-all focus:ring-2 focus:ring-gov-accent"/>
+                                        <input type="text" id="volunteerName" required placeholder="Enter your full name" class="w-full pl-12 pr-4 py-3 sm:py-3.5 rounded-lg border border-gov-border bg-white text-sm font-bold text-gov-navy placeholder-slate-400 transition-all focus:ring-2 focus:ring-gov-accent"/>
                                     </div>
                                 </div>
                                 <div>
                                     <label for="childName" class="block text-sm font-bold text-gov-navy mb-2">Child's Name <span class="text-gov-danger">*</span></label>
-                                    <input type="text" id="childName" required placeholder="Enter child's name" class="w-full px-4 py-3 sm:py-3.5 rounded-lg border border-slate-300 bg-white text-sm font-medium text-gov-navy placeholder-slate-400 transition-all"/>
+                                    <input type="text" id="childName" required placeholder="Enter child's name" class="w-full px-4 py-3 sm:py-3.5 rounded-lg border border-gov-border bg-white text-sm font-medium text-gov-navy placeholder-slate-400 transition-all"/>
                                 </div>
                                 <div>
                                     <label for="parentName" class="block text-sm font-bold text-gov-navy mb-2">Parent / Guardian Name <span class="text-gov-danger">*</span></label>
-                                    <input type="text" id="parentName" required placeholder="Enter parent's name" class="w-full px-4 py-3 sm:py-3.5 rounded-lg border border-slate-300 bg-white text-sm font-medium text-gov-navy placeholder-slate-400 transition-all"/>
+                                    <input type="text" id="parentName" required placeholder="Enter parent's name" class="w-full px-4 py-3 sm:py-3.5 rounded-lg border border-gov-border bg-white text-sm font-medium text-gov-navy placeholder-slate-400 transition-all"/>
                                 </div>
                             </div>
                             
                             <div class="mt-6">
                                 <label class="block text-sm font-bold text-gov-navy mb-2">Child Demographic <span class="text-gov-danger">*</span></label>
                                 <div class="grid grid-cols-2 md:grid-cols-3 gap-2 sm:gap-3">
-                                    <label class="cursor-pointer relative group"><input type="radio" name="childAge" value="0-6 months" class="peer sr-only" required><div class="flex flex-col items-center justify-center p-3 rounded-lg border border-slate-300 bg-white peer-checked:bg-blue-50 peer-checked:border-gov-accent transition-all text-center"><span class="text-sm font-bold text-gov-navy peer-checked:text-gov-accent">0-6 Months</span><span class="text-[10px] text-slate-500 uppercase mt-0.5 peer-checked:text-gov-accent">Newborn</span></div></label>
-                                    <label class="cursor-pointer relative group"><input type="radio" name="childAge" value="6-12 months" class="peer sr-only" required><div class="flex flex-col items-center justify-center p-3 rounded-lg border border-slate-300 bg-white peer-checked:bg-blue-50 peer-checked:border-gov-accent transition-all text-center"><span class="text-sm font-bold text-gov-navy peer-checked:text-gov-accent">6-12 Months</span><span class="text-[10px] text-slate-500 uppercase mt-0.5 peer-checked:text-gov-accent">Infant</span></div></label>
-                                    <label class="cursor-pointer relative group"><input type="radio" name="childAge" value="1-2 years" class="peer sr-only" required><div class="flex flex-col items-center justify-center p-3 rounded-lg border border-slate-300 bg-white peer-checked:bg-blue-50 peer-checked:border-gov-accent transition-all text-center"><span class="text-sm font-bold text-gov-navy peer-checked:text-gov-accent">1-2 Years</span><span class="text-[10px] text-slate-500 uppercase mt-0.5 peer-checked:text-gov-accent">Toddler</span></div></label>
-                                    <label class="cursor-pointer relative group"><input type="radio" name="childAge" value="3-4 years" class="peer sr-only" required><div class="flex flex-col items-center justify-center p-3 rounded-lg border border-slate-300 bg-white peer-checked:bg-blue-50 peer-checked:border-gov-accent transition-all text-center"><span class="text-sm font-bold text-gov-navy peer-checked:text-gov-accent">3-4 Years</span><span class="text-[10px] text-slate-500 uppercase mt-0.5 peer-checked:text-gov-accent">Early Childhood</span></div></label>
-                                    <label class="cursor-pointer relative group"><input type="radio" name="childAge" value="5-6 years" class="peer sr-only" required><div class="flex flex-col items-center justify-center p-3 rounded-lg border border-slate-300 bg-white peer-checked:bg-blue-50 peer-checked:border-gov-accent transition-all text-center"><span class="text-sm font-bold text-gov-navy peer-checked:text-gov-accent">5-6 Years</span><span class="text-[10px] text-slate-500 uppercase mt-0.5 peer-checked:text-gov-accent">Pre-School</span></div></label>
-                                    <label class="cursor-pointer relative group"><input type="radio" name="childAge" value="7-9 years" class="peer sr-only" required><div class="flex flex-col items-center justify-center p-3 rounded-lg border border-slate-300 bg-white peer-checked:bg-blue-50 peer-checked:border-gov-accent transition-all text-center"><span class="text-sm font-bold text-gov-navy peer-checked:text-gov-accent">7-9 Years</span><span class="text-[10px] text-slate-500 uppercase mt-0.5 peer-checked:text-gov-accent">Early Primary</span></div></label>
-                                    <label class="cursor-pointer relative group"><input type="radio" name="childAge" value="10-12 years" class="peer sr-only" required><div class="flex flex-col items-center justify-center p-3 rounded-lg border border-slate-300 bg-white peer-checked:bg-blue-50 peer-checked:border-gov-accent transition-all text-center"><span class="text-sm font-bold text-gov-navy peer-checked:text-gov-accent">10-12 Years</span><span class="text-[10px] text-slate-500 uppercase mt-0.5 peer-checked:text-gov-accent">Late Primary</span></div></label>
-                                    <label class="cursor-pointer relative group"><input type="radio" name="childAge" value="13-15 years" class="peer sr-only" required><div class="flex flex-col items-center justify-center p-3 rounded-lg border border-slate-300 bg-white peer-checked:bg-blue-50 peer-checked:border-gov-accent transition-all text-center"><span class="text-sm font-bold text-gov-navy peer-checked:text-gov-accent">13-15 Years</span><span class="text-[10px] text-slate-500 uppercase mt-0.5 peer-checked:text-gov-accent">Middle School</span></div></label>
-                                    <label class="cursor-pointer relative group"><input type="radio" name="childAge" value="16-18 years" class="peer sr-only" required><div class="flex flex-col items-center justify-center p-3 rounded-lg border border-slate-300 bg-white peer-checked:bg-blue-50 peer-checked:border-gov-accent transition-all text-center"><span class="text-sm font-bold text-gov-navy peer-checked:text-gov-accent">16-18 Years</span><span class="text-[10px] text-slate-500 uppercase mt-0.5 peer-checked:text-gov-accent">High School</span></div></label>
+                                    <label class="cursor-pointer relative group"><input type="radio" name="childAge" value="0-6 months" class="peer sr-only" required><div class="flex flex-col items-center justify-center p-3 rounded-lg border border-gov-border bg-white peer-checked:bg-blue-50 peer-checked:border-gov-accent transition-all text-center"><span class="text-sm font-bold text-gov-navy peer-checked:text-gov-accent">0-6 Months</span><span class="text-[10px] text-slate-500 uppercase mt-0.5 peer-checked:text-gov-accent">Newborn</span></div></label>
+                                    <label class="cursor-pointer relative group"><input type="radio" name="childAge" value="6-12 months" class="peer sr-only" required><div class="flex flex-col items-center justify-center p-3 rounded-lg border border-gov-border bg-white peer-checked:bg-blue-50 peer-checked:border-gov-accent transition-all text-center"><span class="text-sm font-bold text-gov-navy peer-checked:text-gov-accent">6-12 Months</span><span class="text-[10px] text-slate-500 uppercase mt-0.5 peer-checked:text-gov-accent">Infant</span></div></label>
+                                    <label class="cursor-pointer relative group"><input type="radio" name="childAge" value="1-2 years" class="peer sr-only" required><div class="flex flex-col items-center justify-center p-3 rounded-lg border border-gov-border bg-white peer-checked:bg-blue-50 peer-checked:border-gov-accent transition-all text-center"><span class="text-sm font-bold text-gov-navy peer-checked:text-gov-accent">1-2 Years</span><span class="text-[10px] text-slate-500 uppercase mt-0.5 peer-checked:text-gov-accent">Toddler</span></div></label>
+                                    <label class="cursor-pointer relative group"><input type="radio" name="childAge" value="3-4 years" class="peer sr-only" required><div class="flex flex-col items-center justify-center p-3 rounded-lg border border-gov-border bg-white peer-checked:bg-blue-50 peer-checked:border-gov-accent transition-all text-center"><span class="text-sm font-bold text-gov-navy peer-checked:text-gov-accent">3-4 Years</span><span class="text-[10px] text-slate-500 uppercase mt-0.5 peer-checked:text-gov-accent">Early Childhood</span></div></label>
+                                    <label class="cursor-pointer relative group"><input type="radio" name="childAge" value="5-6 years" class="peer sr-only" required><div class="flex flex-col items-center justify-center p-3 rounded-lg border border-gov-border bg-white peer-checked:bg-blue-50 peer-checked:border-gov-accent transition-all text-center"><span class="text-sm font-bold text-gov-navy peer-checked:text-gov-accent">5-6 Years</span><span class="text-[10px] text-slate-500 uppercase mt-0.5 peer-checked:text-gov-accent">Pre-School</span></div></label>
+                                    <label class="cursor-pointer relative group"><input type="radio" name="childAge" value="7-9 years" class="peer sr-only" required><div class="flex flex-col items-center justify-center p-3 rounded-lg border border-gov-border bg-white peer-checked:bg-blue-50 peer-checked:border-gov-accent transition-all text-center"><span class="text-sm font-bold text-gov-navy peer-checked:text-gov-accent">7-9 Years</span><span class="text-[10px] text-slate-500 uppercase mt-0.5 peer-checked:text-gov-accent">Early Primary</span></div></label>
+                                    <label class="cursor-pointer relative group"><input type="radio" name="childAge" value="10-12 years" class="peer sr-only" required><div class="flex flex-col items-center justify-center p-3 rounded-lg border border-gov-border bg-white peer-checked:bg-blue-50 peer-checked:border-gov-accent transition-all text-center"><span class="text-sm font-bold text-gov-navy peer-checked:text-gov-accent">10-12 Years</span><span class="text-[10px] text-slate-500 uppercase mt-0.5 peer-checked:text-gov-accent">Late Primary</span></div></label>
+                                    <label class="cursor-pointer relative group"><input type="radio" name="childAge" value="13-15 years" class="peer sr-only" required><div class="flex flex-col items-center justify-center p-3 rounded-lg border border-gov-border bg-white peer-checked:bg-blue-50 peer-checked:border-gov-accent transition-all text-center"><span class="text-sm font-bold text-gov-navy peer-checked:text-gov-accent">13-15 Years</span><span class="text-[10px] text-slate-500 uppercase mt-0.5 peer-checked:text-gov-accent">Middle School</span></div></label>
+                                    <label class="cursor-pointer relative group"><input type="radio" name="childAge" value="16-18 years" class="peer sr-only" required><div class="flex flex-col items-center justify-center p-3 rounded-lg border border-gov-border bg-white peer-checked:bg-blue-50 peer-checked:border-gov-accent transition-all text-center"><span class="text-sm font-bold text-gov-navy peer-checked:text-gov-accent">16-18 Years</span><span class="text-[10px] text-slate-500 uppercase mt-0.5 peer-checked:text-gov-accent">High School</span></div></label>
                                 </div>
                             </div>
                         </fieldset>
 
-                        <!-- 2. Daily Observation Logistics -->
+                        <!-- Block 2: Daily Observation -->
                         <fieldset>
                             <legend class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2 w-full border-b border-slate-100 pb-2"><i class="ph-fill ph-calendar-check text-base"></i> 2. Daily Log Details</legend>
                             
                             <div class="mb-6">
                                 <label class="block text-sm font-bold text-gov-navy mb-2">Day of Observation <span class="text-gov-danger">*</span></label>
                                 <div class="grid grid-cols-4 sm:flex sm:flex-wrap gap-2">
-                                    <label class="cursor-pointer relative group flex-1 min-w-[60px]"><input type="radio" name="observationDay" value="Day 1" class="peer sr-only" required><div class="flex items-center justify-center py-2.5 rounded-lg border border-slate-300 bg-white peer-checked:bg-gov-navy peer-checked:border-gov-navy peer-checked:text-white text-slate-600 text-sm font-bold transition-all hover:bg-slate-50 shadow-sm">Day 1</div></label>
-                                    <label class="cursor-pointer relative group flex-1 min-w-[60px]"><input type="radio" name="observationDay" value="Day 2" class="peer sr-only" required><div class="flex items-center justify-center py-2.5 rounded-lg border border-slate-300 bg-white peer-checked:bg-gov-navy peer-checked:border-gov-navy peer-checked:text-white text-slate-600 text-sm font-bold transition-all hover:bg-slate-50 shadow-sm">Day 2</div></label>
-                                    <label class="cursor-pointer relative group flex-1 min-w-[60px]"><input type="radio" name="observationDay" value="Day 3" class="peer sr-only" required><div class="flex items-center justify-center py-2.5 rounded-lg border border-slate-300 bg-white peer-checked:bg-gov-navy peer-checked:border-gov-navy peer-checked:text-white text-slate-600 text-sm font-bold transition-all hover:bg-slate-50 shadow-sm">Day 3</div></label>
-                                    <label class="cursor-pointer relative group flex-1 min-w-[60px]"><input type="radio" name="observationDay" value="Day 4" class="peer sr-only" required><div class="flex items-center justify-center py-2.5 rounded-lg border border-slate-300 bg-white peer-checked:bg-gov-navy peer-checked:border-gov-navy peer-checked:text-white text-slate-600 text-sm font-bold transition-all hover:bg-slate-50 shadow-sm">Day 4</div></label>
-                                    <label class="cursor-pointer relative group flex-1 min-w-[60px]"><input type="radio" name="observationDay" value="Day 5" class="peer sr-only" required><div class="flex items-center justify-center py-2.5 rounded-lg border border-slate-300 bg-white peer-checked:bg-gov-navy peer-checked:border-gov-navy peer-checked:text-white text-slate-600 text-sm font-bold transition-all hover:bg-slate-50 shadow-sm">Day 5</div></label>
-                                    <label class="cursor-pointer relative group flex-1 min-w-[60px]"><input type="radio" name="observationDay" value="Day 6" class="peer sr-only" required><div class="flex items-center justify-center py-2.5 rounded-lg border border-slate-300 bg-white peer-checked:bg-gov-navy peer-checked:border-gov-navy peer-checked:text-white text-slate-600 text-sm font-bold transition-all hover:bg-slate-50 shadow-sm">Day 6</div></label>
-                                    <label class="cursor-pointer relative group flex-1 min-w-[60px] col-span-2 sm:col-span-1"><input type="radio" name="observationDay" value="Day 7" class="peer sr-only" required><div class="flex items-center justify-center py-2.5 rounded-lg border border-slate-300 bg-white peer-checked:bg-gov-navy peer-checked:border-gov-navy peer-checked:text-white text-slate-600 text-sm font-bold transition-all hover:bg-slate-50 shadow-sm">Day 7</div></label>
+                                    <label class="cursor-pointer relative group flex-1 min-w-[60px]"><input type="radio" name="observationDay" value="Day 1" class="peer sr-only" required><div class="flex items-center justify-center py-2.5 rounded-lg border border-gov-border bg-white peer-checked:bg-gov-navy peer-checked:text-white text-slate-600 text-sm font-bold transition-all hover:bg-slate-50 shadow-sm">Day 1</div></label>
+                                    <label class="cursor-pointer relative group flex-1 min-w-[60px]"><input type="radio" name="observationDay" value="Day 2" class="peer sr-only" required><div class="flex items-center justify-center py-2.5 rounded-lg border border-gov-border bg-white peer-checked:bg-gov-navy peer-checked:text-white text-slate-600 text-sm font-bold transition-all hover:bg-slate-50 shadow-sm">Day 2</div></label>
+                                    <label class="cursor-pointer relative group flex-1 min-w-[60px]"><input type="radio" name="observationDay" value="Day 3" class="peer sr-only" required><div class="flex items-center justify-center py-2.5 rounded-lg border border-gov-border bg-white peer-checked:bg-gov-navy peer-checked:text-white text-slate-600 text-sm font-bold transition-all hover:bg-slate-50 shadow-sm">Day 3</div></label>
+                                    <label class="cursor-pointer relative group flex-1 min-w-[60px]"><input type="radio" name="observationDay" value="Day 4" class="peer sr-only" required><div class="flex items-center justify-center py-2.5 rounded-lg border border-gov-border bg-white peer-checked:bg-gov-navy peer-checked:text-white text-slate-600 text-sm font-bold transition-all hover:bg-slate-50 shadow-sm">Day 4</div></label>
+                                    <label class="cursor-pointer relative group flex-1 min-w-[60px]"><input type="radio" name="observationDay" value="Day 5" class="peer sr-only" required><div class="flex items-center justify-center py-2.5 rounded-lg border border-gov-border bg-white peer-checked:bg-gov-navy peer-checked:text-white text-slate-600 text-sm font-bold transition-all hover:bg-slate-50 shadow-sm">Day 5</div></label>
+                                    <label class="cursor-pointer relative group flex-1 min-w-[60px]"><input type="radio" name="observationDay" value="Day 6" class="peer sr-only" required><div class="flex items-center justify-center py-2.5 rounded-lg border border-gov-border bg-white peer-checked:bg-gov-navy peer-checked:text-white text-slate-600 text-sm font-bold transition-all hover:bg-slate-50 shadow-sm">Day 6</div></label>
+                                    <label class="cursor-pointer relative group flex-1 min-w-[60px] col-span-2 sm:col-span-1"><input type="radio" name="observationDay" value="Day 7" class="peer sr-only" required><div class="flex items-center justify-center py-2.5 rounded-lg border border-gov-border bg-white peer-checked:bg-gov-navy peer-checked:text-white text-slate-600 text-sm font-bold transition-all hover:bg-slate-50 shadow-sm">Day 7</div></label>
                                 </div>
                             </div>
                             
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
                                 <div>
                                     <label for="screenTime" class="block text-sm font-bold text-gov-navy mb-1.5">Total Screen Time Today <span class="text-gov-danger">*</span></label>
-                                    <select id="screenTime" required class="w-full px-4 py-3 rounded-lg border border-slate-300 bg-white text-sm font-bold text-gov-navy transition-all shadow-sm">
+                                    <select id="screenTime" required class="w-full px-4 py-3 rounded-lg border border-gov-border bg-white text-sm font-bold text-gov-navy transition-all shadow-sm">
                                         <option value="" disabled selected>Select daily duration...</option>
                                         <option value="Less than 1 hour">< 1 Hour</option>
                                         <option value="1 to 2 hours">1 - 2 Hours</option>
@@ -279,7 +306,7 @@
                                 </div>
                                 <div>
                                     <label for="primaryDevice" class="block text-sm font-bold text-gov-navy mb-1.5">Primary Device Used <span class="text-gov-danger">*</span></label>
-                                    <select id="primaryDevice" required class="w-full px-4 py-3 rounded-lg border border-slate-300 bg-white text-sm font-bold text-gov-navy transition-all shadow-sm">
+                                    <select id="primaryDevice" required class="w-full px-4 py-3 rounded-lg border border-gov-border bg-white text-sm font-bold text-gov-navy transition-all shadow-sm">
                                         <option value="" disabled selected>Select device type...</option>
                                         <option value="Smartphone">Smartphone</option>
                                         <option value="Television">Television</option>
@@ -291,19 +318,19 @@
                             </div>
                         </fieldset>
 
-                        <!-- 3. Intervention Details -->
+                        <!-- Block 3: Intervention -->
                         <fieldset>
                             <legend class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2 w-full border-b border-slate-100 pb-2"><i class="ph-fill ph-activity text-base"></i> 3. NSS Intervention Details</legend>
                             <div class="space-y-6">
                                 <div>
                                     <label for="description" class="block text-sm font-bold text-gov-navy mb-1.5">Activity Documentation <span class="text-gov-danger">*</span></label>
-                                    <textarea id="description" required placeholder="Detail the physical or cognitive screen-free play activity conducted today..." rows="3" class="w-full p-4 rounded-lg border border-slate-300 bg-slate-50 focus:bg-white text-sm font-medium text-gov-navy placeholder-slate-400 resize-none transition-all shadow-sm"></textarea>
+                                    <textarea id="description" required placeholder="Detail the physical or cognitive screen-free play activity conducted today..." rows="3" class="w-full p-4 rounded-lg border border-gov-border bg-white text-sm font-medium text-gov-navy placeholder-slate-400 resize-none transition-all shadow-sm"></textarea>
                                 </div>
                                 
                                 <div class="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
                                     <div>
                                         <label for="activityDuration" class="block text-sm font-bold text-gov-navy mb-1.5">Activity Duration <span class="text-gov-danger">*</span></label>
-                                        <input type="text" id="activityDuration" required placeholder="e.g., 45 minutes, 1 hour" class="w-full px-4 py-3 rounded-lg border border-slate-300 bg-slate-50 focus:bg-white text-sm font-medium text-gov-navy placeholder-slate-400 transition-all shadow-sm"/>
+                                        <input type="text" id="activityDuration" required placeholder="e.g., 45 minutes, 1 hour" class="w-full px-4 py-3 rounded-lg border border-gov-border bg-white text-sm font-medium text-gov-navy placeholder-slate-400 transition-all shadow-sm"/>
                                     </div>
                                     
                                     <div>
@@ -311,8 +338,9 @@
                                             <label for="photoInput" class="block text-sm font-bold text-gov-navy">Photographic Evidence</label>
                                             <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider bg-slate-100 px-2 py-0.5 rounded">Optional</span>
                                         </div>
-                                        <div class="relative overflow-hidden border border-slate-300 rounded-lg px-4 py-2.5 bg-white flex items-center justify-center sm:justify-start cursor-pointer hover:bg-slate-50 transition-colors group focus-within:ring-2 focus-within:ring-gov-accent shadow-sm">
-                                            <input type="file" id="photoInput" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20" onchange="handlePhotoSelect(event)"/>
+                                        <!-- Accessible File Input Wrapper -->
+                                        <div class="relative overflow-hidden border border-gov-border rounded-lg px-4 py-2.5 bg-white flex items-center justify-center sm:justify-start cursor-pointer hover:bg-slate-50 transition-colors group focus-within:ring-2 focus-within:ring-gov-accent shadow-sm">
+                                            <input type="file" id="photoInput" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20" onchange="window.handlePhotoSelect(event)"/>
                                             <div id="photo-placeholder" class="flex items-center gap-2 text-slate-500 text-sm font-semibold transition-transform group-hover:scale-105">
                                                 <i class="ph-bold ph-upload-simple text-lg group-hover:text-gov-accent"></i> Click to Attach Image
                                             </div>
@@ -331,7 +359,7 @@
                         <div class="pt-6 border-t border-slate-100">
                             <button type="submit" id="submit-btn" disabled class="w-full bg-gov-navy hover:bg-gov-blue text-white font-bold py-4 px-6 rounded-lg shadow-md transition-all opacity-50 cursor-not-allowed flex items-center justify-center gap-2 uppercase tracking-widest text-sm focus-visible:ring-4 focus-visible:ring-gov-accent/50">
                                 <i id="submit-icon" class="ph-bold ph-spinner spinner text-lg"></i>
-                                <span id="submit-btn-text">Initializing Database...</span>
+                                <span id="submit-btn-text">Initializing Database Connection...</span>
                             </button>
                         </div>
                     </form>
@@ -370,9 +398,9 @@
                         <h2 class="text-xl font-black text-white uppercase tracking-widest">Admin Portal</h2>
                         <p class="text-xs text-blue-200 mt-1.5 font-medium">NSS Program Officers Only</p>
                     </div>
-                    <form id="admin-login-form" class="p-8">
+                    <form id="admin-login-form" onsubmit="window.handleAdminLogin(event)" class="p-8">
                         <div class="mb-6">
-                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2 text-center">Authorization PIN</label>
+                            <label for="adminPin" class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2 text-center">Authorization PIN</label>
                             <input type="password" id="adminPin" placeholder="•••••••" autocomplete="off" class="w-full px-4 py-4 rounded-lg border border-slate-300 focus:border-gov-accent text-center tracking-[0.5em] font-mono text-xl bg-slate-50 transition-colors font-bold shadow-inner"/>
                             <p id="login-error" class="text-red-600 text-xs font-bold text-center mt-3 hidden bg-red-50 py-2 rounded">Invalid Credentials.</p>
                         </div>
@@ -393,21 +421,23 @@
                         <p class="text-sm text-slate-500 font-medium mt-1.5">NSS Program Officer Management Console</p>
                     </div>
                     <div class="flex flex-wrap gap-3">
-                        <button onclick="generateMasterPDF()" class="bg-gov-navy hover:bg-gov-blue text-white px-5 py-2.5 rounded-lg shadow-sm text-sm font-bold flex items-center gap-2 transition-colors uppercase tracking-wider">
+                        <button onclick="window.generateMasterPDF()" class="bg-gov-navy hover:bg-gov-blue text-white px-5 py-2.5 rounded-lg shadow-sm text-sm font-bold flex items-center gap-2 transition-colors uppercase tracking-wider">
                             <i class="ph-bold ph-printer text-lg"></i> Export Master PDF
                         </button>
-                        <button onclick="logoutAdmin()" class="bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 px-5 py-2.5 rounded-lg shadow-sm text-sm font-bold transition-colors uppercase tracking-wider">
+                        <button onclick="window.logoutAdmin()" class="bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 px-5 py-2.5 rounded-lg shadow-sm text-sm font-bold transition-colors uppercase tracking-wider">
                             Secure Logout
                         </button>
                     </div>
                 </div>
 
+                <!-- Web Dashboard Tools -->
                 <div class="mb-6 flex flex-col sm:flex-row gap-3 print-hidden">
                     <div class="relative flex-grow max-w-lg">
+                        <label for="searchInput" class="sr-only">Search</label>
                         <i class="ph-bold ph-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-lg"></i>
-                        <input type="text" id="searchInput" placeholder="Search by child, volunteer, day, or activity..." oninput="handleSearch()" class="w-full pl-12 pr-4 py-3.5 rounded-lg border border-slate-300 focus:border-gov-accent outline-none text-sm bg-slate-50 focus:bg-white transition-colors font-medium text-gov-navy shadow-inner">
+                        <input type="text" id="searchInput" placeholder="Search by child, volunteer, day, or activity..." oninput="window.handleSearch()" class="w-full pl-12 pr-4 py-3.5 rounded-lg border border-slate-300 focus:border-gov-accent outline-none text-sm bg-slate-50 focus:bg-white transition-colors font-medium text-gov-navy shadow-inner">
                     </div>
-                    <button onclick="clearSearch()" class="px-6 py-3.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg text-sm font-bold transition-colors border border-slate-200 uppercase tracking-wider">Clear</button>
+                    <button onclick="window.clearSearch()" class="px-6 py-3.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg text-sm font-bold transition-colors border border-slate-200 uppercase tracking-wider">Clear</button>
                 </div>
 
                 <!-- Web Data Table -->
@@ -443,33 +473,33 @@
     
     <!-- Edit Modal -->
     <div id="edit-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 print-hidden">
-        <div class="absolute inset-0 modal-bg transition-opacity" onclick="closeEditModal()"></div>
+        <div class="absolute inset-0 modal-bg transition-opacity" onclick="window.closeEditModal()"></div>
         <div class="bg-white rounded-2xl shadow-modal w-full max-w-2xl relative z-10 fade-in overflow-hidden border border-slate-200 flex flex-col max-h-[90vh]">
             <div class="bg-gov-navy px-6 py-5 flex justify-between items-center text-white flex-shrink-0">
                 <h3 class="font-bold text-lg flex items-center gap-2 uppercase tracking-wider text-sm"><i class="ph-bold ph-pencil-simple text-lg"></i> Modify Record</h3>
-                <button onclick="closeEditModal()" class="hover:text-slate-300 transition-colors"><i class="ph-bold ph-x text-xl"></i></button>
+                <button onclick="window.closeEditModal()" class="hover:text-slate-300 transition-colors"><i class="ph-bold ph-x text-xl"></i></button>
             </div>
             
             <div class="overflow-y-auto flex-grow p-6 sm:p-8">
-                <form id="edit-form" class="space-y-6">
+                <form id="edit-form" onsubmit="window.submitEditForm(event)" class="space-y-6">
                     <input type="hidden" id="edit-id" />
                     
                     <div class="mb-4">
-                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Volunteer Name</label>
+                        <label for="edit-volunteerName" class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Volunteer Name</label>
                         <input type="text" id="edit-volunteerName" required class="w-full px-4 py-3 rounded-md border border-slate-300 text-sm font-bold text-gov-navy bg-slate-50 focus:bg-white transition-colors"/>
                     </div>
                     
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 border-b border-slate-100 pb-6">
                         <div>
-                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Child's Name</label>
+                            <label for="edit-childName" class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Child's Name</label>
                             <input type="text" id="edit-childName" required class="w-full px-4 py-3 rounded-md border border-slate-300 text-sm font-bold text-gov-navy bg-slate-50 focus:bg-white transition-colors"/>
                         </div>
                         <div>
-                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Parent / Guardian</label>
+                            <label for="edit-parentName" class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Parent / Guardian</label>
                             <input type="text" id="edit-parentName" required class="w-full px-4 py-3 rounded-md border border-slate-300 text-sm font-bold text-gov-navy bg-slate-50 focus:bg-white transition-colors"/>
                         </div>
                         <div>
-                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Demographic</label>
+                            <label for="edit-childAge" class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Demographic</label>
                             <select id="edit-childAge" required class="w-full px-4 py-3 rounded-md border border-slate-300 text-sm font-bold text-gov-navy bg-slate-50 focus:bg-white transition-colors">
                                 <option value="0-6 months">0-6 Months</option>
                                 <option value="6-12 months">6-12 Months</option>
@@ -483,7 +513,7 @@
                             </select>
                         </div>
                         <div>
-                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Observation Day</label>
+                            <label for="edit-observationDay" class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Observation Day</label>
                             <select id="edit-observationDay" required class="w-full px-4 py-3 rounded-md border border-slate-300 text-sm font-bold text-gov-navy bg-slate-50 focus:bg-white transition-colors">
                                 <option value="Day 1">Day 1</option><option value="Day 2">Day 2</option><option value="Day 3">Day 3</option>
                                 <option value="Day 4">Day 4</option><option value="Day 5">Day 5</option><option value="Day 6">Day 6</option><option value="Day 7">Day 7</option>
@@ -493,7 +523,7 @@
                     
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                         <div>
-                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Daily Screen Time</label>
+                            <label for="edit-screenTime" class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Daily Screen Time</label>
                             <select id="edit-screenTime" required class="w-full px-4 py-3 rounded-md border border-slate-300 text-sm font-bold text-gov-navy bg-slate-50 focus:bg-white transition-colors">
                                 <option value="Less than 1 hour">< 1 Hour/Day</option>
                                 <option value="1 to 2 hours">1 - 2 Hours/Day</option>
@@ -502,7 +532,7 @@
                             </select>
                         </div>
                         <div>
-                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Primary Device</label>
+                            <label for="edit-primaryDevice" class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Primary Device</label>
                             <select id="edit-primaryDevice" required class="w-full px-4 py-3 rounded-md border border-slate-300 text-sm font-bold text-gov-navy bg-slate-50 focus:bg-white transition-colors">
                                 <option value="Smartphone">Smartphone</option>
                                 <option value="Television">Television</option>
@@ -515,11 +545,11 @@
                     
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-5 border-t border-slate-100 pt-6">
                         <div class="sm:col-span-2">
-                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Activity Description</label>
+                            <label for="edit-description" class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Activity Description</label>
                             <textarea id="edit-description" required rows="2" class="w-full px-4 py-3 rounded-md border border-slate-300 text-sm font-medium text-gov-navy resize-none bg-slate-50 focus:bg-white transition-colors"></textarea>
                         </div>
                         <div>
-                            <label class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Duration</label>
+                            <label for="edit-activityDuration" class="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">Duration</label>
                             <input type="text" id="edit-activityDuration" required class="w-full h-[62px] px-4 rounded-md border border-slate-300 text-sm font-bold text-gov-navy bg-slate-50 focus:bg-white transition-colors"/>
                         </div>
                     </div>
@@ -532,7 +562,7 @@
             </div>
             
             <div class="p-5 bg-white border-t border-slate-200 flex gap-4 flex-shrink-0">
-                <button type="button" onclick="closeEditModal()" class="flex-1 px-4 py-3.5 bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 rounded-lg text-xs font-bold transition-all uppercase tracking-widest">Cancel</button>
+                <button type="button" onclick="window.closeEditModal()" class="flex-1 px-4 py-3.5 bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 rounded-lg text-xs font-bold transition-all uppercase tracking-widest">Cancel</button>
                 <button type="submit" form="edit-form" class="flex-1 px-4 py-3.5 bg-gov-accent hover:bg-blue-700 text-white rounded-lg text-xs font-bold transition-all uppercase tracking-widest shadow-md">Update Registry</button>
             </div>
         </div>
@@ -540,7 +570,7 @@
 
     <!-- Delete Confirmation Modal -->
     <div id="delete-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 print-hidden">
-        <div class="absolute inset-0 modal-bg transition-opacity" onclick="closeDeleteModal()"></div>
+        <div class="absolute inset-0 modal-bg transition-opacity" onclick="window.closeDeleteModal()"></div>
         <div class="bg-white rounded-2xl shadow-modal w-full max-w-sm relative z-10 fade-in p-8 text-center border-t-[5px] border-gov-danger">
             <div class="w-20 h-20 bg-red-50 text-gov-danger border border-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <i class="ph-bold ph-warning text-4xl"></i>
@@ -549,12 +579,14 @@
             <p class="text-sm text-slate-500 mb-8 font-medium">This action is irreversible and removes data from the official database.</p>
             <div class="flex flex-col gap-3">
                 <button type="button" id="confirm-delete-btn" class="w-full px-4 py-4 bg-gov-danger hover:bg-red-700 text-white rounded-lg font-bold text-xs uppercase tracking-widest transition-all shadow-md">Confirm Deletion</button>
-                <button type="button" onclick="closeDeleteModal()" class="w-full px-4 py-4 bg-white border border-slate-300 hover:bg-slate-50 text-slate-600 rounded-lg font-bold text-xs uppercase tracking-widest transition-all">Cancel</button>
+                <button type="button" onclick="window.closeDeleteModal()" class="w-full px-4 py-4 bg-white border border-slate-300 hover:bg-slate-50 text-slate-600 rounded-lg font-bold text-xs uppercase tracking-widest transition-all">Cancel</button>
             </div>
         </div>
     </div>
 
-    <!-- FIREBASE SDK & LOGIC -->
+    <!-- ========================================== -->
+    <!-- FIREBASE SDK & CORE APPLICATION LOGIC      -->
+    <!-- ========================================== -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
@@ -587,7 +619,7 @@
         let deletingId = null;
         let isAdminActive = false;
 
-        // --- 1. SMART DAILY MEMORY (Pre-fill logic) ---
+        // --- SMART DAILY MEMORY (Pre-fill logic) ---
         window.addEventListener('DOMContentLoaded', () => {
             try {
                 const savedVol = localStorage.getItem('nss_volName');
@@ -613,7 +645,7 @@
             }
             
             // Force initialize default view
-            switchView('submit');
+            window.switchView('submit');
         });
 
         // View Controller
@@ -625,6 +657,7 @@
             const btnFeed = document.getElementById('nav-feed');
             const btnAdmin = document.getElementById('nav-admin');
 
+            // Reset Nav
             [btnSubmit, btnFeed].forEach(btn => {
                 btn.className = "nav-btn flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-3 rounded-lg text-sm font-bold transition-all text-slate-600 hover:bg-slate-50 hover:text-gov-navy";
             });
@@ -654,15 +687,15 @@
                     const canvas = document.createElement('canvas');
                     const MAX_WIDTH = 800; 
                     let scaleSize = 1;
-                    if(img.width > MAX_WIDTH) {
-                        scaleSize = MAX_WIDTH / img.width;
-                    }
+                    if(img.width > MAX_WIDTH) scaleSize = MAX_WIDTH / img.width;
+                    
                     canvas.width = img.width * scaleSize;
                     canvas.height = img.height * scaleSize;
 
                     const ctx = canvas.getContext('2d');
                     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
+                    // Compress to 0.7 for fast DB upload & PDF rendering
                     currentPhotoBase64 = canvas.toDataURL('image/jpeg', 0.7);
 
                     document.getElementById('photo-placeholder').classList.add('hidden');
@@ -674,10 +707,11 @@
             reader.readAsDataURL(file);
         };
 
-        // Admin Authentication
-        document.getElementById('admin-login-form').addEventListener('submit', (e) => {
+        // --- ADMIN LOGIN ENGINE ---
+        window.handleAdminLogin = function(e) {
             e.preventDefault(); 
-            const pinInput = document.getElementById('adminPin').value;
+            // Explicitly trim and convert PIN to uppercase for fail-proof logic
+            const pinInput = document.getElementById('adminPin').value.trim().toUpperCase();
             
             if (pinInput === ADMIN_PIN) {
                 isAdminActive = true;
@@ -688,18 +722,18 @@
                 document.getElementById('print-date').innerText = new Date().toLocaleDateString('en-IN', dateOpts);
                 
                 document.getElementById('searchInput').value = ''; 
-                switchView('admin_dashboard');
+                window.switchView('admin_dashboard');
             } else {
                 document.getElementById('login-error').classList.remove('hidden');
             }
-        });
+        };
         
         window.logoutAdmin = function() { 
             isAdminActive = false;
-            switchView('submit'); 
-        }
+            window.switchView('submit'); 
+        };
 
-        // Server Status UI
+        // --- SERVER CONNECTION & FIREBASE AUTH ---
         function updateServerStatus(isConnected) {
             const statusDot = document.getElementById('server-dot');
             const statusText = document.getElementById('server-text');
@@ -715,7 +749,6 @@
             }
         }
 
-        // Firebase Auth Initialization
         const initAuth = async () => {
             try {
                 if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
@@ -738,7 +771,7 @@
             if (user) {
                 btn.disabled = false; 
                 btn.classList.remove('opacity-50', 'cursor-not-allowed');
-                btnText.innerText = "Submit Daily Record";
+                btnText.innerText = "Submit Official Record";
                 btnIcon.className = "ph-bold ph-paper-plane-tilt text-lg";
                 updateServerStatus(true);
                 loadData();
@@ -753,10 +786,10 @@
         
         initAuth();
 
-        // Data Sync
-        const loadData = () => {
+        // --- REAL-TIME DATA SYNC ---
+        function loadData() {
             if (!currentUser) return;
-            const submissionsRef = collection(db, 'artifacts', appId, 'public', 'data', 'nss_weekly_final_prod');
+            const submissionsRef = collection(db, 'artifacts', appId, 'public', 'data', 'nss_poshan_production');
             
             onSnapshot(submissionsRef, (snapshot) => {
                 const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
@@ -765,12 +798,13 @@
                 
                 document.getElementById('feed-count').innerText = data.length;
                 renderFeed(data);
+                
                 if(isAdminActive) renderTable();
             }, (error) => { 
                 console.error("Firestore Sync Error", error); 
                 updateServerStatus(false);
             });
-        };
+        }
 
         window.handleSearch = function() { if(isAdminActive) renderTable(); };
         window.clearSearch = function() { 
@@ -778,8 +812,8 @@
             if(isAdminActive) renderTable(); 
         };
 
-        // --- Renderers ---
-        const renderFeed = (data) => {
+        // --- UI RENDERERS ---
+        function renderFeed(data) {
             const emptyState = document.getElementById('feed-empty');
             const listContainer = document.getElementById('feed-list');
             listContainer.innerHTML = '';
@@ -811,7 +845,7 @@
                             <div>
                                 <div class="flex items-center gap-2 mb-1.5">
                                     <span class="text-[10px] text-white font-bold uppercase tracking-widest bg-gov-navy px-2 py-0.5 rounded">${oDay}</span>
-                                    <span class="text-xs font-semibold text-slate-400">${dateStr}</span>
+                                    <span class="text-xs font-semibold text-slate-400">• ${dateStr}</span>
                                 </div>
                                 <h3 class="text-lg font-black text-gov-navy tracking-tight">${cName} <span class="text-sm font-semibold text-slate-400">c/o ${pName}</span></h3>
                                 <div class="mt-1">
@@ -821,7 +855,7 @@
                             ${photoBadge}
                         </div>
                         <div class="bg-slate-50 p-3 sm:p-4 rounded-lg border border-slate-200 my-4 grid grid-cols-2 gap-4 text-xs font-medium">
-                            <div><span class="text-slate-400 block text-[9px] uppercase tracking-widest font-bold mb-0.5">Device Used</span><span class="text-gov-navy font-bold">${sDev} (${sTime})</span></div>
+                            <div><span class="text-slate-400 block text-[9px] uppercase tracking-widest font-bold mb-0.5">Prior Device</span><span class="text-gov-navy font-bold">${sDev} (${sTime})</span></div>
                             <div><span class="text-slate-400 block text-[9px] uppercase tracking-widest font-bold mb-0.5">Play Duration</span><span class="text-gov-navy font-bold">${aDur}</span></div>
                         </div>
                         <p class="text-slate-700 text-sm leading-relaxed font-medium">"${post.description}"</p>
@@ -832,9 +866,9 @@
                     </div>`);
                 });
             }
-        };
+        }
 
-        const renderTable = () => {
+        function renderTable() {
             const query = document.getElementById('searchInput').value.toLowerCase();
             const filteredData = globalSubmissions.filter(post => 
                 (post.childName && post.childName.toLowerCase().includes(query)) ||
@@ -871,7 +905,7 @@
                 const aDur = post.activityDuration || "N/A";
 
                 tbody.insertAdjacentHTML('beforeend', `
-                <tr class="border-b border-slate-200 hover:bg-slate-50 transition-colors">
+                <tr class="border-b border-slate-200 hover:bg-slate-50 transition-colors print:break-inside-avoid">
                     <td class="py-3 px-4 border-r border-slate-200 whitespace-nowrap">
                         <div class="font-bold text-gov-navy text-sm">${oDay}</div>
                         <div class="text-[9px] text-slate-500 font-bold uppercase tracking-widest mt-0.5">${dateStr}</div>
@@ -891,15 +925,15 @@
                         <div class="text-[9px] text-slate-500 font-bold uppercase tracking-widest mt-1.5">Duration: <span class="text-gov-navy">${aDur}</span></div>
                     </td>
                     <td class="py-3 px-4 text-center align-middle border-r border-slate-200">${evidenceCell}</td>
-                    <td class="py-3 px-4 text-center align-middle whitespace-nowrap">
-                        <button onclick="openEditModal('${post.id}')" class="text-gov-accent hover:bg-blue-50 p-1.5 rounded transition-colors mb-1" aria-label="Edit Record"><i class="ph-bold ph-pencil-simple text-base"></i></button>
-                        <button onclick="openDeleteModal('${post.id}')" class="text-gov-danger hover:bg-red-50 p-1.5 rounded transition-colors" aria-label="Delete Record"><i class="ph-bold ph-trash text-base"></i></button>
+                    <td class="py-3 px-4 text-center align-middle print-hidden whitespace-nowrap">
+                        <button onclick="window.openEditModal('${post.id}')" class="text-gov-accent hover:bg-blue-50 p-1.5 rounded transition-colors mb-1" aria-label="Edit Record"><i class="ph-bold ph-pencil-simple text-base"></i></button>
+                        <button onclick="window.openDeleteModal('${post.id}')" class="text-gov-danger hover:bg-red-50 p-1.5 rounded transition-colors" aria-label="Delete Record"><i class="ph-bold ph-trash text-base"></i></button>
                     </td>
                 </tr>`);
             });
-        };
+        }
 
-        // --- MASTER WEEKLY PDF GENERATOR ENGINE ---
+        // --- OFFICIAL PDF GENERATOR ---
         window.generateMasterPDF = function() {
             const query = document.getElementById('searchInput').value.toLowerCase();
             const filteredData = globalSubmissions.filter(post => 
@@ -1024,11 +1058,11 @@
                 pageIndex++;
             });
 
-            window.print();
+            setTimeout(() => { window.print(); }, 300);
         };
 
 
-        // --- Admin CRUD Operations ---
+        // --- CRUD Operations ---
         window.openEditModal = function(id) {
             const post = globalSubmissions.find(p => p.id === id);
             if(!post) return;
@@ -1038,7 +1072,6 @@
             document.getElementById('edit-childName').value = post.childName || "";
             document.getElementById('edit-parentName').value = post.parentName || "";
             document.getElementById('edit-observationDay').value = post.observationDay || "Day 1";
-            
             document.getElementById('edit-childAge').value = post.childAge;
             document.getElementById('edit-screenTime').value = post.screenTime || "";
             document.getElementById('edit-primaryDevice').value = post.primaryDevice || "";
@@ -1054,11 +1087,11 @@
             document.body.style.overflow = 'auto';
         };
 
-        document.getElementById('edit-form').addEventListener('submit', async (e) => {
+        window.submitEditForm = async function(e) {
             e.preventDefault();
             if (!currentUser) return;
             try {
-                await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'nss_weekly_final_prod', document.getElementById('edit-id').value), {
+                await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'nss_poshan_production', document.getElementById('edit-id').value), {
                     volunteerName: document.getElementById('edit-volunteerName').value,
                     childName: document.getElementById('edit-childName').value,
                     parentName: document.getElementById('edit-parentName').value,
@@ -1069,9 +1102,9 @@
                     activityDuration: document.getElementById('edit-activityDuration').value,
                     description: document.getElementById('edit-description').value
                 });
-                closeEditModal();
+                window.closeEditModal();
             } catch (error) { alert("Registry Update Failed. Please check connection."); }
-        });
+        };
 
         window.openDeleteModal = function(id) {
             deletingId = id;
@@ -1093,8 +1126,8 @@
             btn.disabled = true;
 
             try {
-                await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'nss_weekly_final_prod', deletingId));
-                closeDeleteModal();
+                await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'nss_poshan_production', deletingId));
+                window.closeDeleteModal();
             } catch (error) { 
                 alert("Delete Failed. Please check connection."); 
             } finally { 
@@ -1103,8 +1136,8 @@
             }
         });
 
-        // --- Form Submission Engine (Public) ---
-        document.getElementById('submission-form').addEventListener('submit', async (e) => {
+        // --- PRIMARY FORM SUBMISSION (Public) ---
+        window.submitMainForm = async function(e) {
             e.preventDefault();
             if (!currentUser) return;
 
@@ -1122,7 +1155,7 @@
             btnText.innerText = "Encrypting Data & Transmitting...";
 
             try {
-                // 1. Save static details to LocalStorage (Smart Memory)
+                // Save static details to memory for faster entry tomorrow
                 try {
                     localStorage.setItem('nss_volName', document.getElementById('volunteerName').value);
                     localStorage.setItem('nss_childName', document.getElementById('childName').value);
@@ -1130,8 +1163,8 @@
                     localStorage.setItem('nss_childAge', selectedAge.value);
                 } catch(e) { console.warn("Storage blocked"); }
 
-                // 2. Transmit to Firebase
-                await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'nss_weekly_final_prod'), {
+                // Push to Firestore
+                await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'nss_poshan_production'), {
                     volunteerName: document.getElementById('volunteerName').value,
                     childName: document.getElementById('childName').value,
                     parentName: document.getElementById('parentName').value,
@@ -1146,16 +1179,16 @@
                     userId: currentUser.uid
                 });
 
-                // 3. UI Success State
                 document.getElementById('submission-form').classList.add('hidden');
                 document.getElementById('success-message').classList.remove('hidden');
                 document.getElementById('success-message').classList.add('flex');
                 
-                // 4. Smart Reset (Keep static, clear daily specific)
+                // Smart Reset: Clear ONLY the daily input fields, keep identities
                 document.getElementById('description').value = '';
                 document.getElementById('activityDuration').value = '';
                 document.getElementById('screenTime').value = '';
                 document.getElementById('primaryDevice').value = '';
+                
                 const selectedDayRadio = document.querySelector('input[name="observationDay"]:checked');
                 if(selectedDayRadio) selectedDayRadio.checked = false;
 
@@ -1168,7 +1201,7 @@
                     document.getElementById('success-message').classList.add('hidden');
                     document.getElementById('success-message').classList.remove('flex');
                     document.getElementById('submission-form').classList.remove('hidden');
-                    switchView('feed');
+                    window.switchView('feed');
                     
                     btn.disabled = false; 
                     btn.classList.remove('opacity-90');
@@ -1183,7 +1216,7 @@
                 btnIcon.className = "ph-bold ph-paper-plane-tilt text-lg";
                 btnText.innerText = "Submit Daily Record";
             }
-        });
+        };
     </script>
 </body>
 </html>
